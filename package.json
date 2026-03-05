@@ -1,6 +1,6 @@
 {
   "name": "quickgestures",
-  "version": "0.1.39",
+  "version": "0.3.4",
   "description": "Chrome extension for mouse gestures",
   "private": true,
   "scripts": {

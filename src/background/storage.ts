@@ -1,5 +1,5 @@
 import { ExtensionSettings } from '../shared/types';
-import { DEFAULT_SETTINGS, STORAGE_KEYS } from '../shared/constants';
+import { DEFAULT_SETTINGS, DEFAULT_TAB_ORDER, STORAGE_KEYS } from '../shared/constants';
 
 export class StorageManager {
   async getSettings(): Promise<ExtensionSettings> {
@@ -41,13 +41,17 @@ export class StorageManager {
     if (settings.version === DEFAULT_SETTINGS.version) {
       return settings as ExtensionSettings;
     }
-    
+
+    if (!settings.tabOrder) {
+      settings.tabOrder = DEFAULT_TAB_ORDER;
+    }
+
     const migrated: ExtensionSettings = {
       ...DEFAULT_SETTINGS,
       ...settings,
       version: DEFAULT_SETTINGS.version
     };
-    
+
     this.setSettings(migrated).catch(console.error);
     return migrated;
   }

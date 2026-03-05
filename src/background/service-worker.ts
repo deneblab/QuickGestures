@@ -3,16 +3,19 @@ import { onMessage } from '../shared/messaging';
 import { ActionRouter } from './action-router';
 import { TabManager } from './tab-manager';
 import { StorageManager } from './storage';
+import { TabOrderService } from './tab-order-service';
 
 class BackgroundService {
   private actionRouter: ActionRouter;
   private storageManager: StorageManager;
   private tabManager: TabManager;
-  
+  private tabOrderService: TabOrderService;
+
   constructor() {
     this.storageManager = new StorageManager();
     this.tabManager = new TabManager();
     this.actionRouter = new ActionRouter(this.tabManager, this.storageManager);
+    this.tabOrderService = new TabOrderService();
     
     this.initialize();
   }

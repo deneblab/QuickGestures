@@ -64,6 +64,18 @@
                         </span>
                         Search Engine
                     </li>
+                    <li class="nav-item" data-section="taborder">
+                        <span class="nav-icon">
+                            <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2" y="3" width="16" height="3" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <rect x="2" y="8.5" width="16" height="3" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <rect x="2" y="14" width="16" height="3" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <path d="M13 4.5L15 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M13 10L15 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                        Tab Order
+                    </li>
                     <li class="nav-item" data-section="exclusions">
                         <span class="nav-icon">
                             <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -215,6 +227,81 @@
                         <label for="customSearchUrl">Custom Search URL:</label>
                         <input type="url" id="customSearchUrl" name="customSearchUrl" placeholder="https://example.com/search?q=%s">
                         <small>Use %s where the search term should be inserted</small>
+                    </div>
+                </section>
+
+                <!-- Tab Order Section -->
+                <section id="taborder-section" class="section">
+                    <h2>Tab Order</h2>
+
+                    <div class="context-settings">
+                        <h3>On tab open</h3>
+
+                        <div class="setting-group">
+                            <label class="radio-group-label">Position:</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="tabOpenPosition" value="default">
+                                    follow default behaviour
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="tabOpenPosition" value="right">
+                                    position right of current tab
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="tabOpenPosition" value="left">
+                                    position left of current tab
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="tabOpenPosition" value="far_right">
+                                    position far right end of all tabs
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <label class="radio-group-label">State:</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="tabOpenState" value="default">
+                                    follow default behaviour
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="tabOpenState" value="foreground">
+                                    open in foreground
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="tabOpenState" value="background">
+                                    open in background
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="context-settings">
+                        <h3>After tab close</h3>
+
+                        <div class="setting-group">
+                            <label class="radio-group-label">Position:</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="tabClosePosition" value="default">
+                                    follow default behaviour
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="tabClosePosition" value="left">
+                                    go to left tab
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="tabClosePosition" value="right">
+                                    go to right tab
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="tabClosePosition" value="last_active">
+                                    go to last active tab
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </section>
 

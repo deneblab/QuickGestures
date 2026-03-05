@@ -1,4 +1,4 @@
-import { ExtensionSettings, ContextMappings, ActionType } from './types';
+import { ExtensionSettings, ContextMappings, ActionType, TabOrderSettings } from './types';
 
 export const DEFAULT_STYLE = {
   lineColor: '#1E90FF',
@@ -26,6 +26,12 @@ export const DEFAULT_RECOGNITION = {
 export const DEFAULT_SEARCH = {
   provider: 'google' as const,
   customUrl: undefined
+};
+
+export const DEFAULT_TAB_ORDER: TabOrderSettings = {
+  openPosition: 'default',
+  openState: 'default',
+  closePosition: 'default'
 };
 
 export const DEFAULT_EXCLUSIONS = [
@@ -68,9 +74,10 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   recognition: DEFAULT_RECOGNITION,
   mappings: DEFAULT_MAPPINGS,
   search: DEFAULT_SEARCH,
+  tabOrder: DEFAULT_TAB_ORDER,
   exclusions: DEFAULT_EXCLUSIONS,
   globalEnabled: true,
-  version: 1
+  version: 2
 };
 
 export const SEARCH_ENGINES = {

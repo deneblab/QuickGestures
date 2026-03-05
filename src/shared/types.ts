@@ -53,12 +53,23 @@ export interface SearchSettings {
   customUrl?: string;
 }
 
+export type TabOpenPosition = 'default' | 'right' | 'left' | 'far_right';
+export type TabOpenState = 'default' | 'foreground' | 'background';
+export type TabClosePosition = 'default' | 'left' | 'right' | 'last_active';
+
+export interface TabOrderSettings {
+  openPosition: TabOpenPosition;
+  openState: TabOpenState;
+  closePosition: TabClosePosition;
+}
+
 export interface ExtensionSettings {
   style: StyleSettings;
   activation: ActivationSettings;
   recognition: RecognitionSettings;
   mappings: ContextMappings;
   search: SearchSettings;
+  tabOrder: TabOrderSettings;
   exclusions: string[];
   globalEnabled: boolean;
   version: number;

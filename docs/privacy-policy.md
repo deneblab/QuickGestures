@@ -22,7 +22,7 @@ We do not collect, store, transmit, or process any of the following data types:
 - **Website content** (text, images, sounds, videos, hyperlinks)
 
 ### What We DO Store Locally
-- **Extension Settings**: Your gesture configurations, visual preferences, and site exclusions
+- **Extension Settings**: Your gesture configurations, visual preferences, tab order preferences, and site exclusions
 - **Custom Gestures**: Your personalized gesture mappings and action assignments
 
 **Important**: All data is stored locally on your device using Chrome's secure storage API. Nothing is transmitted to external servers.
@@ -37,9 +37,9 @@ We do not collect, store, transmit, or process any of the following data types:
 - **Location**: Chrome's secure local storage (never transmitted)
 
 #### `tabs`
-- **Purpose**: Perform tab management actions (close, navigate, create new tabs)
-- **Usage**: Only when you perform gesture actions like "close tab" or "new tab"
-- **Access**: Current tab information only when gesture is performed
+- **Purpose**: Perform tab management actions (close, navigate, create new tabs) and enforce tab order preferences
+- **Usage**: When you perform gesture actions like "close tab" or "new tab", and to apply your tab positioning and focus preferences
+- **Access**: Current tab information only when gesture is performed or tab events occur
 
 #### `scripting`
 - **Purpose**: Execute gesture recognition on web pages and perform scroll actions

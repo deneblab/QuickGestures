@@ -28,6 +28,11 @@ A powerful Chrome extension that brings fluid mouse gesture navigation to your b
 - Context indicators and visual confirmations
 - High contrast mode for accessibility
 
+### 📑 **Tab Order Control**
+- Configure where new tabs open (right/left of current, far right, or default)
+- Control new tab state (foreground, background, or default)
+- Choose focus behavior after closing a tab (left, right, last active, or default)
+
 ### ⚙️ **Fully Customizable**
 - Complete gesture mapping editor
 - Visual arrow symbols (⬅➡⬆⬇) instead of letters
@@ -126,6 +131,11 @@ A powerful Chrome extension that brings fluid mouse gesture navigation to your b
 - **Selection Gestures**: Enable/disable text selection actions
 - **Movement Thresholds**: Adjust sensitivity settings
 
+### Tab Order
+- **On tab open — Position**: Follow default, right of current tab, left of current tab, far right end
+- **On tab open — State**: Follow default, open in foreground, open in background
+- **After tab close — Position**: Follow default, go to left tab, go to right tab, go to last active tab
+
 ### Site Exclusions
 - Add wildcard patterns to disable gestures on specific sites
 - Examples: `*.test.com/*`, `https://example.com/admin/*`
@@ -182,7 +192,7 @@ QuickGestures is designed with privacy in mind:
 
 ### Required Permissions
 - `storage` - Save your gesture settings and preferences locally
-- `tabs` - Tab management actions (new, close, switch, reopen)
+- `tabs` - Tab management actions (new, close, switch, reopen) and tab order control
 - `scripting` - Gesture detection and page interactions (scrolling)
 - `activeTab` - Current page gesture capture and visual feedback
 - `sessions` - Restore recently closed tabs with reopen gesture

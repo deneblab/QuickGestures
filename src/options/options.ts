@@ -1,4 +1,4 @@
-import { ExtensionSettings, GestureContext, ActionType, GestureMapping } from '../shared/types';
+import { ExtensionSettings, GestureContext, ActionType, GestureMapping, TabOpenPosition, TabOpenState, TabClosePosition } from '../shared/types';
 import { DEFAULT_SETTINGS, ACTION_LABELS } from '../shared/constants';
 import { sendMessage } from '../shared/messaging';
 import { convertGestureToArrows } from '../shared/utils';
@@ -46,6 +46,7 @@ class OptionsPage {
   private setupEventListeners(): void {
     this.setupNavigationHandlers();
     this.setupSettingsHandlers();
+    this.setupTabOrderHandlers();
     this.setupMappingHandlers();
     this.setupUtilityHandlers();
     this.setupModalHandlers();
@@ -170,6 +171,29 @@ class OptionsPage {
     });
   }
   
+  private setupTabOrderHandlers(): void {
+    document.querySelectorAll('input[name="tabOpenPosition"]').forEach(radio => {
+      radio.addEventListener('change', async (e) => {
+        this.settings.tabOrder.openPosition = (e.target as HTMLInputElement).value as TabOpenPosition;
+        await this.saveSettings();
+      });
+    });
+
+    document.querySelectorAll('input[name="tabOpenState"]').forEach(radio => {
+      radio.addEventListener('change', async (e) => {
+        this.settings.tabOrder.openState = (e.target as HTMLInputElement).value as TabOpenState;
+        await this.saveSettings();
+      });
+    });
+
+    document.querySelectorAll('input[name="tabClosePosition"]').forEach(radio => {
+      radio.addEventListener('change', async (e) => {
+        this.settings.tabOrder.closePosition = (e.target as HTMLInputElement).value as TabClosePosition;
+        await this.saveSettings();
+      });
+    });
+  }
+
   private setupMappingHandlers(): void {
     const addMappingBtn = document.getElementById('add-mapping-btn');
     addMappingBtn?.addEventListener('click', () => {
@@ -237,6 +261,7 @@ class OptionsPage {
     this.renderStyleSettings();
     this.renderContextSettings();
     this.renderSearchSettings();
+    this.renderTabOrderSettings();
     this.renderExclusions();
     this.renderMappings();
     this.populateActionOptions();
@@ -298,6 +323,17 @@ class OptionsPage {
     this.toggleCustomUrlGroup();
   }
   
+  private renderTabOrderSettings(): void {
+    const openPosRadio = document.querySelector(`input[name="tabOpenPosition"][value="${this.settings.tabOrder.openPosition}"]`) as HTMLInputElement;
+    if (openPosRadio) openPosRadio.checked = true;
+
+    const openStateRadio = document.querySelector(`input[name="tabOpenState"][value="${this.settings.tabOrder.openState}"]`) as HTMLInputElement;
+    if (openStateRadio) openStateRadio.checked = true;
+
+    const closePosRadio = document.querySelector(`input[name="tabClosePosition"][value="${this.settings.tabOrder.closePosition}"]`) as HTMLInputElement;
+    if (closePosRadio) closePosRadio.checked = true;
+  }
+
   private renderMappings(): void {
     const container = document.getElementById('mappings-container');
     if (!container) return;

@@ -20,7 +20,8 @@ src/
 │   ├── service-worker.ts    # Main background script
 │   ├── action-router.ts     # Gesture action execution
 │   ├── storage.ts           # Settings persistence
-│   └── tab-manager.ts       # Tab operations
+│   ├── tab-manager.ts       # Tab operations
+│   └── tab-order-service.ts # Tab open/close order preferences
 ├── content/             # Content scripts (injected into pages)
 │   ├── content-script.ts    # Main content script entry
 │   ├── gesture-capture.ts   # Mouse event capture
@@ -66,6 +67,7 @@ interface ExtensionSettings {
   recognition: RecognitionSettings; // Gesture sensitivity
   mappings: MappingSettings;      // Gesture → Action mapping
   search: SearchSettings;         // Search engine config
+  tabOrder: TabOrderSettings;    // Tab open/close behavior
   exclusions: string[];          // URL exclusion patterns
   globalEnabled: boolean;
   version: number;
@@ -228,7 +230,7 @@ npm run package      # Create extension ZIP
 
 ### Required Permissions (from manifest.json)
 - `storage` - Save settings locally
-- `tabs` - Tab management operations
+- `tabs` - Tab management operations and tab order control
 - `scripting` - Inject content scripts and interact with pages
 - `activeTab` - Access current tab for gesture capture
 - `contextMenus` - Right-click menu integration
