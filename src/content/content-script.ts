@@ -90,6 +90,9 @@ class ContentScript {
         console.warn('Gesture execution failed:', response?.error);
       }
     } catch (error) {
+      if (String(error).includes('Extension context invalidated')) {
+        return;
+      }
       console.error('Failed to send gesture message:', error);
     }
   }
