@@ -4,10 +4,25 @@ import { DEFAULT_TAB_ORDER, STORAGE_KEYS } from '../shared/constants';
 export class TabOrderService {
   private settings: TabOrderSettings = DEFAULT_TAB_ORDER;
   private activationStacks: Map<number, number[]> = new Map();
+  private tabIndexMap: Map<number, number> = new Map();
 
   constructor() {
     this.loadSettings();
+    this.initializeTabIndices();
     this.setupListeners();
+  }
+
+  private async initializeTabIndices(): Promise<void> {
+    try {
+      const tabs = await chrome.tabs.query({});
+      for (const tab of tabs) {
+        if (tab.id !== undefined) {
+          this.tabIndexMap.set(tab.id, tab.index);
+        }
+      }
+    } catch (error) {
+      console.error('TabOrderService: Failed to initialize tab indices:', error);
+    }
   }
 
   private async loadSettings(): Promise<void> {
@@ -37,11 +52,26 @@ export class TabOrderService {
     });
 
     chrome.tabs.onCreated.addListener((tab) => {
+      if (tab.id !== undefined) {
+        this.tabIndexMap.set(tab.id, tab.index);
+      }
       this.handleTabCreated(tab);
     });
 
     chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
       this.handleTabRemoved(tabId, removeInfo);
+    });
+
+    chrome.tabs.onMoved.addListener((tabId, moveInfo) => {
+      this.tabIndexMap.set(tabId, moveInfo.toIndex);
+    });
+
+    chrome.tabs.onAttached.addListener((tabId, attachInfo) => {
+      this.tabIndexMap.set(tabId, attachInfo.newPosition);
+    });
+
+    chrome.tabs.onDetached.addListener((tabId) => {
+      this.tabIndexMap.delete(tabId);
     });
 
     chrome.windows.onRemoved.addListener((windowId) => {
@@ -132,8 +162,12 @@ export class TabOrderService {
 
   private async handleTabRemoved(tabId: number, removeInfo: chrome.tabs.TabRemoveInfo): Promise<void> {
     if (removeInfo.isWindowClosing) {
+      this.tabIndexMap.delete(tabId);
       return;
     }
+
+    const closedTabIndex = this.tabIndexMap.get(tabId);
+    this.tabIndexMap.delete(tabId);
 
     const stack = this.activationStacks.get(removeInfo.windowId);
     if (stack) {
@@ -151,14 +185,21 @@ export class TabOrderService {
 
       tabs.sort((a, b) => a.index - b.index);
 
+      // Update tabIndexMap with current indices after removal
+      for (const tab of tabs) {
+        if (tab.id !== undefined) {
+          this.tabIndexMap.set(tab.id, tab.index);
+        }
+      }
+
       let targetTab: chrome.tabs.Tab | undefined;
 
       switch (this.settings.closePosition) {
         case 'left':
-          targetTab = this.findAdjacentTab(tabs, 'left');
+          targetTab = this.findAdjacentTab(tabs, 'left', closedTabIndex);
           break;
         case 'right':
-          targetTab = this.findAdjacentTab(tabs, 'right');
+          targetTab = this.findAdjacentTab(tabs, 'right', closedTabIndex);
           break;
         case 'last_active':
           targetTab = this.findLastActiveTab(tabs, removeInfo.windowId);
@@ -173,16 +214,20 @@ export class TabOrderService {
     }
   }
 
-  private findAdjacentTab(tabs: chrome.tabs.Tab[], direction: 'left' | 'right'): chrome.tabs.Tab | undefined {
-    const activeTab = tabs.find(t => t.active);
-    if (!activeTab) return tabs[0];
-
-    const currentIndex = tabs.indexOf(activeTab);
+  private findAdjacentTab(tabs: chrome.tabs.Tab[], direction: 'left' | 'right', closedTabIndex?: number): chrome.tabs.Tab | undefined {
+    if (closedTabIndex === undefined) {
+      // Fallback: if we don't know where the closed tab was, use first tab
+      return tabs[0];
+    }
 
     if (direction === 'left') {
-      return tabs[currentIndex - 1] || tabs[0];
+      // Activate the tab that is now at closedTabIndex - 1 (the original left neighbor)
+      const targetIndex = closedTabIndex - 1;
+      return tabs.find(t => t.index === targetIndex) || tabs[0];
     } else {
-      return tabs[currentIndex + 1] || tabs[tabs.length - 1];
+      // Activate the tab that is now at closedTabIndex (the original right neighbor shifted left)
+      const targetIndex = closedTabIndex;
+      return tabs.find(t => t.index === targetIndex) || tabs[tabs.length - 1];
     }
   }
 
