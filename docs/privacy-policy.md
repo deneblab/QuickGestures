@@ -21,25 +21,25 @@ We do not collect, store, transmit, or process any of the following data types:
 - **User activity** (network monitoring, clicks, mouse position, scroll patterns, keystroke logging)
 - **Website content** (text, images, sounds, videos, hyperlinks)
 
-### What We DO Store Locally
+### What We DO Store
 - **Extension Settings**: Your gesture configurations, visual preferences, tab order preferences, and site exclusions
 - **Custom Gestures**: Your personalized gesture mappings and action assignments
 
-**Important**: All data is stored locally on your device using Chrome's secure storage API. Nothing is transmitted to external servers.
+**Important**: Your settings are saved with Chrome's storage API (`chrome.storage.sync`). If you are signed in to Chrome with sync enabled, Chrome itself may sync these settings between your devices through your Google account, under Google's privacy policy and your Chrome Sync settings. The extension never sends this data to us or to any other server, and we have no access to it.
 
 ## Permissions Explained
 
 ### Required Permissions and Their Purpose
 
 #### `storage`
-- **Purpose**: Save your extension settings locally on your device
+- **Purpose**: Save your extension settings in your browser
 - **Data Stored**: Gesture configurations, visual preferences, excluded sites
-- **Location**: Chrome's secure local storage (never transmitted)
+- **Location**: Chrome's extension storage (`chrome.storage.sync`). Chrome may sync it across your signed-in devices; we never receive it
 
 #### `tabs`
 - **Purpose**: Perform tab management actions (close, navigate, create new tabs) and enforce tab order preferences
 - **Usage**: When you perform gesture actions like "close tab" or "new tab", and to apply your tab positioning and focus preferences
-- **Access**: Current tab information only when gesture is performed or tab events occur
+- **Access**: Current tab information only when a gesture is performed or tab events occur. The extension reads a tab's URL only to detect restricted browser pages (such as `chrome://`) where gestures cannot run; URLs and titles are never stored or transmitted
 
 #### `scripting`
 - **Purpose**: Execute gesture recognition on web pages and perform scroll actions
@@ -58,8 +58,8 @@ We do not collect, store, transmit, or process any of the following data types:
 
 ## Data Security
 
-- **Local Storage Only**: All settings and configurations remain on your device
-- **No Data Transmission**: Extension never communicates with external servers
+- **Browser Storage Only**: Settings are kept in Chrome's extension storage and, if you use Chrome Sync, synced by Chrome itself between your own devices
+- **No Data Transmission**: The extension itself never sends data to any server
 - **Chrome Security**: Uses Chrome's built-in security features for data protection
 - **No Third Parties**: No data is shared with third-party services
 
@@ -72,7 +72,7 @@ QuickGestures does not use any third-party services, analytics, or tracking tool
 You have complete control over the extension:
 - **Settings Management**: Modify or reset all configurations through the options page
 - **Site Exclusions**: Disable the extension on specific websites
-- **Complete Removal**: Uninstalling the extension removes all locally stored data
+- **Complete Removal**: Uninstalling the extension removes its stored settings
 
 ## Updates to This Policy
 
@@ -103,7 +103,7 @@ A: QuickGestures is open source. You can review the complete source code on GitH
 A: Yes! Use the site exclusions feature in settings to disable gestures on any website.
 
 **Q: What happens to my data if I uninstall the extension?**  
-A: All locally stored settings are automatically removed when you uninstall the extension.
+A: The extension's stored settings are removed when you uninstall the extension.
 
 ## Contact Information
 
@@ -131,7 +131,7 @@ This extension complies with:
 
 **Key Privacy Principles:**
 ✅ **No Data Collection** - We don't collect personal information  
-✅ **Local Storage Only** - Settings stay on your device  
+✅ **Browser Storage Only** - Settings live in Chrome's storage (synced by Chrome if you use Chrome Sync)  
 ✅ **No External Communication** - Extension never contacts servers  
 ✅ **Open Source** - Code is transparent and auditable  
 ✅ **User Control** - You control all settings and data

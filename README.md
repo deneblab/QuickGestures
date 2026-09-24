@@ -191,7 +191,7 @@ QuickGestures is designed with privacy in mind:
 - ✅ **Minimal Permissions** - Only essential Chrome APIs used
 
 ### Required Permissions
-- `storage` - Save your gesture settings and preferences locally
+- `storage` - Save your gesture settings and preferences (Chrome may sync them across your devices if Chrome Sync is on)
 - `tabs` - Tab management actions (new, close, switch, reopen) and tab order control
 - `scripting` - Gesture detection and page interactions (scrolling)
 - `sessions` - Restore recently closed tabs with reopen gesture
