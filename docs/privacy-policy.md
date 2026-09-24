@@ -46,11 +46,6 @@ We do not collect, store, transmit, or process any of the following data types:
 - **Usage**: Inject gesture capture code and handle scroll-to-top/bottom commands
 - **Scope**: Only on pages where gestures are enabled
 
-#### `activeTab`
-- **Purpose**: Interact with the currently active tab for gesture recognition
-- **Usage**: Capture mouse gestures and provide visual feedback overlay
-- **Access**: Only when gesture is being performed
-
 #### `sessions`
 - **Purpose**: Restore recently closed tabs when using "reopen tab" gesture
 - **Usage**: Only when you perform the reopen closed tab gesture

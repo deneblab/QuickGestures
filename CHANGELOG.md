@@ -2,6 +2,14 @@
 
 All notable user-facing changes to QuickGestures are documented here.
 
+## [0.3.7]
+
+### Fixed
+- Closing a tab now activates the correct neighbouring tab when "go to left/right" is selected
+
+### Changed
+- Removed the unused `activeTab` permission; the extension now requests fewer permissions
+
 ## [0.3.4]
 
 ### Added

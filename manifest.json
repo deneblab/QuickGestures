@@ -7,7 +7,6 @@
     "storage",
     "tabs",
     "scripting",
-    "activeTab",
     "sessions"
   ],
   "host_permissions": [

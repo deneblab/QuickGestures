@@ -194,7 +194,6 @@ QuickGestures is designed with privacy in mind:
 - `storage` - Save your gesture settings and preferences locally
 - `tabs` - Tab management actions (new, close, switch, reopen) and tab order control
 - `scripting` - Gesture detection and page interactions (scrolling)
-- `activeTab` - Current page gesture capture and visual feedback
 - `sessions` - Restore recently closed tabs with reopen gesture
 - **Website Access** (`http://*/*`, `https://*/*`) - Enable gestures on all sites
 

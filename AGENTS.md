@@ -232,7 +232,6 @@ npm run package      # Create extension ZIP
 - `storage` - Save settings locally
 - `tabs` - Tab management operations and tab order control
 - `scripting` - Inject content scripts and interact with pages
-- `activeTab` - Access current tab for gesture capture
 - `contextMenus` - Right-click menu integration
 - `sessions` - Restore recently closed tabs
 - `downloads` - Handle link downloads
@@ -275,7 +274,7 @@ refactor: simplify message passing between scripts
 ### Release Workflow
 - **Production branch**: For stable releases
 - **GitHub Actions**: Automated release creation
-- **Version sync**: Automatic across manifest.json, package.json, version.txt
+- **Version sync**: Automatic across manifest.json and package.json; calculated by abcversion (BaseVersion in .abcversion.json)
 
 ## 🚀 Success Metrics for Agents
 
