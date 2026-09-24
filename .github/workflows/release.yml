@@ -33,26 +33,40 @@ jobs:
         with:
           node-version: "18"
           cache: "npm"
-      - id: semver
-        uses: ./.github/actions/semver-js
-        with:
-          mode: config-change
-          config_file: version.txt
-          tag_prefix: v
-      - name: Show version info
+
+      - name: Install abcversion
         run: |
-          echo "Version:        ${{ steps.semver.outputs.version }}"
-          echo "Tag:            ${{ steps.semver.outputs.tag }}"
-          echo "SHA:            ${{ steps.semver.outputs.sha }}"
-          echo "ShortSHA:       ${{ steps.semver.outputs.short_sha }}"
-          echo "Branch:         ${{ steps.semver.outputs.branch }}"
-          echo "BuildDate(UTC): ${{ steps.semver.outputs.build_date_utc }}"
-          
+          mkdir -p "$HOME/.local/bin"
+          curl -fsSL -o "$HOME/.local/bin/abcversion" \
+            https://github.com/deneblab/abcversion/releases/latest/download/abcversion-linux-x64
+          chmod +x "$HOME/.local/bin/abcversion"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/abcversion" --version
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION="$(abcversion -p semversion)"
+
           # Validate version is not empty
-          if [ -z "${{ steps.semver.outputs.version }}" ]; then
+          if [ -z "$VERSION" ]; then
             echo "Error: Version output is empty"
             exit 1
           fi
+
+          {
+            echo "version=$VERSION"
+            echo "tag=v$VERSION"
+            echo "sha=$(abcversion -p gitsha)"
+            echo "branch=$(abcversion -p gitbranch)"
+            echo "build_date_utc=$(abcversion -p datetime)"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "Version:        $VERSION"
+          echo "Tag:            v$VERSION"
+          echo "SHA:            $(abcversion -p gitsha)"
+          echo "Branch:         $(abcversion -p gitbranch)"
+          echo "BuildDate(UTC): $(abcversion -p datetime)"
 
       - name: Install dependencies
         run: npm ci
@@ -60,14 +74,14 @@ jobs:
       - name: Sync versions
         run: node scripts/version-sync.js
         env:
-          TARGET_VERSION: ${{ steps.semver.outputs.version }}
+          TARGET_VERSION: ${{ steps.version.outputs.version }}
       - name: Create release tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
           # Check if tag already exists locally or remotely
-          TAG_NAME="v${{ steps.semver.outputs.version }}"
+          TAG_NAME="v${{ steps.version.outputs.version }}"
           
           # Delete local tag if it exists
           git tag -d "$TAG_NAME" 2>/dev/null || true
@@ -88,7 +102,7 @@ jobs:
       - name: Prepare release with filtered changelog
         run: |
           # Use the existing prepare-release script which filters SAVEPOINT commits
-          TARGET_VERSION="${{ steps.semver.outputs.version }}" node scripts/prepare-release.js
+          TARGET_VERSION="${{ steps.version.outputs.version }}" node scripts/prepare-release.js
           
       - name: Debug release notes
         run: |
@@ -100,11 +114,11 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.semver.outputs.version }}
-          name: QuickGestures v${{ steps.semver.outputs.version }}
+          tag_name: v${{ steps.version.outputs.version }}
+          name: QuickGestures v${{ steps.version.outputs.version }}
           body_path: RELEASE_NOTES.md
           draft: false
-          prerelease: ${{ contains(steps.semver.outputs.version, 'beta') || contains(steps.semver.outputs.version, 'alpha') }}
+          prerelease: ${{ contains(steps.version.outputs.version, 'beta') || contains(steps.version.outputs.version, 'alpha') }}
           files: |
             quickgestures-*.zip
             RELEASE_NOTES.md

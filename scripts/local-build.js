@@ -4,45 +4,20 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-function parseVersion(versionString) {
-  const match = (versionString || '').match(/^\s*(\d+)\.(\d+)(?:\.(\d+))?/);
-  if (!match) throw new Error(`Cannot parse version from "${versionString}"`);
-  return { 
-    major: parseInt(match[1], 10), 
-    minor: parseInt(match[2], 10), 
-    patch: parseInt(match[3] || '0', 10) 
-  };
-}
-
-function getCommitCount() {
-  try {
-    const count = execSync('git rev-list --count HEAD', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
-    return parseInt(count, 10) || 0;
-  } catch {
-    return 0;
-  }
-}
-
 function calculateVersion() {
   try {
-    // Read base version from version.txt
-    const versionFile = path.join(__dirname, '../version.txt');
-    const baseVersionString = fs.readFileSync(versionFile, 'utf8').trim();
-    const baseVersion = parseVersion(baseVersionString);
-    
-    console.log(`📖 Base version from version.txt: ${baseVersionString}`);
-    
-    // Get commit count as increment
-    const increment = getCommitCount();
-    console.log(`📊 Commit count increment: ${increment}`);
-    
-    // Calculate final version: base.patch + increment
-    const finalPatch = baseVersion.patch + increment;
-    const finalVersion = `${baseVersion.major}.${baseVersion.minor}.${finalPatch}`;
-    
-    return finalVersion;
+    // abcversion reads BaseVersion from .abcversion.json and derives the patch from git history
+    const version = execSync('abcversion -p semversion', {
+      encoding: 'utf8',
+      cwd: path.join(__dirname, '..'),
+      stdio: ['ignore', 'pipe', 'pipe']
+    }).trim();
+
+    if (!version) throw new Error('abcversion returned an empty version');
+    return version;
   } catch (error) {
     console.error('❌ Error calculating version:', error.message);
+    console.error('   Install abcversion: https://github.com/deneblab/abcversion#installation');
     process.exit(1);
   }
 }
@@ -83,7 +58,7 @@ function runBuild() {
 function main() {
   console.log('🚀 Starting local build with semver...\n');
   
-  // Calculate next version using existing semver-js
+  // Calculate next version using abcversion
   const newVersion = calculateVersion();
   console.log(`📦 Calculated version: ${newVersion}`);
   
