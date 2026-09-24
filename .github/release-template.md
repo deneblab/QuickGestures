@@ -49,7 +49,7 @@ This release has been tested on:
 
 ## 📋 Full Changelog
 
-**Full Changelog**: https://github.com/your-username/QuickGestures/compare/vPREVIOUS..vCURRENT
+**Full Changelog**: https://github.com/deneblab/QuickGestures/compare/vPREVIOUS..vCURRENT
 
 ## 🆘 Support
 

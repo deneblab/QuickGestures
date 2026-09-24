@@ -86,7 +86,7 @@ ${changelog || '- Initial release'}
 This version will be available on the Chrome Web Store shortly.
 
 ---
-**Full Changelog**: https://github.com/your-username/QuickGestures/releases/tag/v${finalVersion}`;
+**Full Changelog**: https://github.com/deneblab/QuickGestures/releases/tag/v${finalVersion}`;
 
     fs.writeFileSync('RELEASE_NOTES.md', releaseNotes);
     

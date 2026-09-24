@@ -13,7 +13,7 @@
 ### Step 1: Get the Code
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/QuickGestures.git
+git clone https://github.com/deneblab/QuickGestures.git
 cd QuickGestures
 ```
 
