@@ -24,15 +24,15 @@ All notable user-facing changes to QuickGestures are documented here.
 
 ### Added
 - Multi-context mouse gestures (page, link, selection)
-- Page navigation gestures: back, forward, reload, scroll up/down
+- Page navigation gestures: back, forward, scroll up/down
 - Tab management gestures: new tab, close tab, reopen closed tab, switch tabs
-- Link gestures: open in new tab, open in new window, copy URL
-- Selection gestures: search selected text, copy selection
-- Customizable gesture trail with color, width, and opacity settings
+- Link gestures: open in background or foreground tab, open in new window
+- Selection gestures: search selected text in a new or the current tab
+- Customizable gesture trail with color and width settings
 - Live gesture name display during drawing
 - High contrast mode for accessibility
 - Configurable search engine (Google, Bing, DuckDuckGo, custom URL)
 - Site exclusion patterns with wildcard support
-- Full gesture mapping editor with visual arrow symbols
+- Full gesture mapping editor with visual arrow symbols; extra actions such as reload, duplicate tab, copy link and copy selection can be assigned to any gesture
 - Import/export settings
-- Right-click and middle-click activation options
+- Per-context activation settings, with optional modifier keys for link and selection gestures

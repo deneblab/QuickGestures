@@ -20,30 +20,30 @@ Navigate, manage tabs and search with simple mouse gestures. Fast, customizable 
 Control your browser with a flick of the mouse. QuickGestures lets you go back, close a tab, reopen it, search selected text and more by drawing a short pattern, so your hand never has to leave the mouse.
 
 HOW IT WORKS
-Hold the right mouse button (or the middle button, if you prefer) and draw a pattern, such as left for Back or down then right for Close Tab. A trail follows your cursor and the gesture name appears as you draw, so you always see what will happen before you let go.
+Hold the right mouse button and draw a pattern, such as left for Back or down then right for Close Tab. On links and selected text, drag with the left button. A trail follows your cursor, and you can turn on a live gesture name so you see what will happen before you let go.
 
 WHAT YOU CAN DO
-Page gestures
-- Go back and forward, reload
+Page gestures (ready to use)
+- Go back and forward
 - Scroll to the top or bottom of the page
 - Open a new tab, close the current tab, close the tabs to the right
 - Reopen the last closed tab
 - Switch to the tab on the left or right
 
-Link gestures
+Link gestures (ready to use)
 - Open a link in a background tab, a foreground tab or a new window
-- Copy the link address
 
-Selection gestures
+Selection gestures (ready to use)
 - Search the selected text in a new tab or in the current tab
-- Copy the selected text
+
+More actions you can assign yourself in the editor: reload, duplicate tab, new window, close window, minimize window, copy link address and copy selected text.
 
 MADE TO BE YOURS
-- Full gesture mapping editor: reassign any gesture to any action, with arrow symbols instead of letters
+- Full gesture mapping editor: assign any gesture to any action, with arrow symbols instead of letters
 - Choose your search engine: Google, Bing, DuckDuckGo or a custom URL
 - Tab order control: decide where new tabs open, whether they open in the foreground or background, and which tab gets focus after you close one
-- Adjustable sensitivity and gesture thresholds
-- Customizable gesture trail: color, width and opacity
+- Adjustable movement threshold for starting a gesture
+- Customizable gesture trail: color and width
 - High contrast mode for accessibility
 - Site exclusions with wildcard patterns (for example *.example.com/*), for sites where you don't want gestures
 - Import and export your settings
@@ -76,30 +76,30 @@ Nawiguj, zarządzaj kartami i wyszukuj gestami myszy. Szybko, elastycznie i pryw
 Steruj przeglądarką ruchem myszy. QuickGestures pozwala cofnąć stronę, zamknąć kartę, przywrócić ją, wyszukać zaznaczony tekst i wiele więcej prostym gestem, więc nie musisz odrywać ręki od myszy.
 
 JAK TO DZIAŁA
-Przytrzymaj prawy przycisk myszy (lub środkowy, jeśli wolisz) i narysuj wzór, na przykład w lewo, żeby cofnąć stronę, albo w dół i w prawo, żeby zamknąć kartę. Za kursorem ciągnie się ślad, a nazwa gestu pojawia się w trakcie rysowania, więc przed puszczeniem przycisku wiesz, co się stanie.
+Przytrzymaj prawy przycisk myszy i narysuj wzór, na przykład w lewo, żeby cofnąć stronę, albo w dół i w prawo, żeby zamknąć kartę. Na linkach i zaznaczonym tekście przeciągaj lewym przyciskiem. Za kursorem ciągnie się ślad, a po włączeniu podglądu nazwy gestu widzisz w trakcie rysowania, co się stanie po puszczeniu przycisku.
 
 CO MOŻESZ ZROBIĆ
-Gesty na stronie
-- Wstecz, dalej, odśwież
+Gesty na stronie (gotowe do użycia)
+- Wstecz i dalej
 - Przewiń na górę lub na dół strony
 - Otwórz nową kartę, zamknij bieżącą, zamknij karty po prawej
 - Przywróć ostatnio zamkniętą kartę
 - Przełącz na kartę po lewej lub po prawej
 
-Gesty na linkach
+Gesty na linkach (gotowe do użycia)
 - Otwórz link w karcie w tle, na pierwszym planie lub w nowym oknie
-- Skopiuj adres linku
 
-Gesty na zaznaczeniu
+Gesty na zaznaczeniu (gotowe do użycia)
 - Wyszukaj zaznaczony tekst w nowej lub w bieżącej karcie
-- Skopiuj zaznaczony tekst
+
+Dodatkowe akcje do samodzielnego przypisania w edytorze: odśwież, duplikuj kartę, nowe okno, zamknij okno, minimalizuj okno, skopiuj adres linku i skopiuj zaznaczony tekst.
 
 DOSTOSUJ DO SIEBIE
 - Pełny edytor gestów: przypisz dowolny gest do dowolnej akcji, ze strzałkami zamiast liter
 - Wybierz wyszukiwarkę: Google, Bing, DuckDuckGo lub własny adres URL
 - Kontrola kolejności kart: gdzie otwierają się nowe karty, czy w tle, czy na pierwszym planie, i która karta dostaje fokus po zamknięciu innej
-- Regulowana czułość i progi rozpoznawania gestów
-- Konfigurowalny ślad gestu: kolor, grubość i przezroczystość
+- Regulowany próg ruchu, od którego zaczyna się gest
+- Konfigurowalny ślad gestu: kolor i grubość
 - Tryb wysokiego kontrastu
 - Wykluczenia stron z użyciem wzorców (np. *.example.com/*) dla witryn, na których gesty mają nie działać
 - Import i eksport ustawień
