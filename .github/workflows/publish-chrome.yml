@@ -111,13 +111,15 @@ jobs:
           echo "🚀 Attempting to publish to Chrome Web Store (target: $TARGET)"
           
           if [ "$TARGET" = "testers" ]; then
-            PUBLISH_RESULT=$(npx chrome-webstore-upload publish \
-              --extension-id "$EXTENSION_ID" \
-              --trusted-testers 2>&1) || PUBLISH_EXIT_CODE=$?
-          else
-            PUBLISH_RESULT=$(npx chrome-webstore-upload publish \
-              --extension-id "$EXTENSION_ID" 2>&1) || PUBLISH_EXIT_CODE=$?
+            # The Chrome Web Store API v2 rejects the TRUSTED_TESTERS publish type,
+            # so the upload stays a draft. Publish it from the Developer Dashboard.
+            echo "ℹ️  Target 'testers': upload finished, package left as a draft."
+            echo "   Publish it from https://chrome.google.com/webstore/devconsole"
+            exit 0
           fi
+
+          PUBLISH_RESULT=$(npx chrome-webstore-upload publish \
+            --extension-id "$EXTENSION_ID" 2>&1) || PUBLISH_EXIT_CODE=$?
           
           if [ ${PUBLISH_EXIT_CODE:-0} -eq 0 ]; then
             echo "✅ Successfully published to Chrome Web Store"
