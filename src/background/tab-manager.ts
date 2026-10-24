@@ -64,7 +64,7 @@ export class TabManager {
     await chrome.tabs.remove(tabId);
   }
   
-  async duplicateTab(tabId: number): Promise<chrome.tabs.Tab> {
+  async duplicateTab(tabId: number): Promise<chrome.tabs.Tab | undefined> {
     return await chrome.tabs.duplicate(tabId);
   }
   
@@ -112,7 +112,7 @@ export class TabManager {
     }
   }
   
-  async createWindow(url?: string): Promise<chrome.windows.Window> {
+  async createWindow(url?: string): Promise<chrome.windows.Window | undefined> {
     return await chrome.windows.create({ url });
   }
   

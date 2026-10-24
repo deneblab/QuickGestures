@@ -1,4 +1,4 @@
-import { TabOrderSettings } from '../shared/types';
+import { ExtensionSettings, TabOrderSettings } from '../shared/types';
 import { DEFAULT_TAB_ORDER, STORAGE_KEYS } from '../shared/constants';
 
 export class TabOrderService {
@@ -28,7 +28,7 @@ export class TabOrderService {
   private async loadSettings(): Promise<void> {
     try {
       const result = await chrome.storage.sync.get([STORAGE_KEYS.SETTINGS]);
-      const stored = result[STORAGE_KEYS.SETTINGS];
+      const stored = result[STORAGE_KEYS.SETTINGS] as ExtensionSettings | undefined;
       if (stored?.tabOrder) {
         this.settings = stored.tabOrder;
       }
@@ -40,7 +40,7 @@ export class TabOrderService {
   private setupListeners(): void {
     chrome.storage.onChanged.addListener((changes, area) => {
       if (area === 'sync' && changes[STORAGE_KEYS.SETTINGS]) {
-        const newSettings = changes[STORAGE_KEYS.SETTINGS].newValue;
+        const newSettings = changes[STORAGE_KEYS.SETTINGS].newValue as ExtensionSettings | undefined;
         if (newSettings?.tabOrder) {
           this.settings = newSettings.tabOrder;
         }
@@ -160,7 +160,7 @@ export class TabOrderService {
     }
   }
 
-  private async handleTabRemoved(tabId: number, removeInfo: chrome.tabs.TabRemoveInfo): Promise<void> {
+  private async handleTabRemoved(tabId: number, removeInfo: chrome.tabs.OnRemovedInfo): Promise<void> {
     if (removeInfo.isWindowClosing) {
       this.tabIndexMap.delete(tabId);
       return;

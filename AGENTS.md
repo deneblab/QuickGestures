@@ -10,7 +10,7 @@
 - **TypeScript** - Primary language with strict type checking
 - **esbuild** - Fast compilation and bundling
 - **Chrome Extensions API** - Manifest V3 compliance
-- **Node.js 18+** - Development environment
+- **Node.js 22+** - Development environment
 - **Canvas API** - Visual gesture overlay rendering
 
 ### Project Structure

@@ -7,7 +7,7 @@
 
 ### Prerequisites
 - Google Chrome browser
-- Node.js 18+ (for building from source)
+- Node.js 22+ (for building from source)
 - Basic command line knowledge
 
 ### Step 1: Get the Code
@@ -46,7 +46,7 @@ This creates a `dist` folder with the compiled extension.
 ### Extension Not Loading
 - **Check Developer Mode**: Make sure it's enabled in `chrome://extensions/`
 - **Build Issues**: Run `npm run clean && npm run build` to rebuild
-- **Node Version**: Ensure Node.js 18+ is installed
+- **Node Version**: Ensure Node.js 22+ is installed
 
 ### Gestures Not Working
 - **Check Extension Status**: Ensure it's enabled in `chrome://extensions/`

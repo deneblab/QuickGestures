@@ -4,7 +4,8 @@
   "description": "Chrome extension for mouse gestures",
   "private": true,
   "scripts": {
-    "build": "node esbuild.config.js",
+    "build": "npm run typecheck && node esbuild.config.js",
+    "typecheck": "tsc --noEmit",
     "watch": "node esbuild.config.js --watch",
     "clean": "rm -rf dist",
     "dev": "npm run clean && npm run watch",
@@ -17,12 +18,12 @@
     "release:tag": "npm run prepare-release && echo 'Create and push git tag to trigger release.'"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.268",
-    "@types/node": "^20.14.0",
-    "esbuild": ">=0.25.0",
-    "typescript": "^5.4.0"
+    "@types/chrome": "^0.3.6",
+    "@types/node": "^22.20.5",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.0.0"
   }
 }
