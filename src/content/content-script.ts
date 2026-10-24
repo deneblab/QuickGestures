@@ -3,9 +3,11 @@ import { DEFAULT_SETTINGS } from '../shared/constants';
 import { sendMessage, onMessage } from '../shared/messaging';
 import { GestureCapture } from './gesture-capture';
 import { ExclusionMatcher } from './exclusion-matcher';
+import { GoogleMapsLinks } from './google-maps-links';
 
 class ContentScript {
   private gestureCapture: GestureCapture | null = null;
+  private googleMapsLinks: GoogleMapsLinks | null = null;
   private settings: ExtensionSettings = DEFAULT_SETTINGS;
   private exclusionMatcher: ExclusionMatcher;
   
@@ -18,6 +20,11 @@ class ContentScript {
     try {
       await this.loadSettings();
       this.setupMessageHandlers();
+      
+      // Exclusions apply to gestures only
+      if (GoogleMapsLinks.isGoogleHost()) {
+        this.googleMapsLinks = new GoogleMapsLinks(this.settings);
+      }
       
       // Check if current URL is excluded
       if (this.exclusionMatcher.isExcluded(window.location.href)) {
@@ -101,6 +108,7 @@ class ContentScript {
   private async handleSettingsUpdate(settings: ExtensionSettings): Promise<void> {
     this.settings = settings;
     this.exclusionMatcher.updatePatterns(settings.exclusions);
+    this.googleMapsLinks?.updateSettings(settings);
     
     // Check if current URL is now excluded
     if (this.exclusionMatcher.isExcluded(window.location.href)) {

@@ -4,6 +4,9 @@ All notable user-facing changes to QuickGestures are documented here.
 
 ## [Unreleased]
 
+### Added
+- Clickable map on Google Search: in the EU, clicking the map preview in Google results opens Google Maps in a new tab again (can be turned off in Search Engine settings)
+
 ### Fixed
 - Sites added to the exclusion list are now excluded as soon as the page loads, not only after settings are changed
 

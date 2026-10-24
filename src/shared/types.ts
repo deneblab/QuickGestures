@@ -63,6 +63,10 @@ export interface TabOrderSettings {
   closePosition: TabClosePosition;
 }
 
+export interface GoogleMapsSettings {
+  clickableMapPreview: boolean;
+}
+
 export interface ExtensionSettings {
   style: StyleSettings;
   activation: ActivationSettings;
@@ -70,6 +74,7 @@ export interface ExtensionSettings {
   mappings: ContextMappings;
   search: SearchSettings;
   tabOrder: TabOrderSettings;
+  googleMaps: GoogleMapsSettings;
   exclusions: string[];
   globalEnabled: boolean;
   version: number;
