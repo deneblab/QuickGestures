@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Download release asset (ZIP)
-        uses: robinraju/release-downloader@v1.10
+        uses: robinraju/release-downloader@v1.13
         with:
           latest: true
           fileName: "quickgestures-*.zip"
