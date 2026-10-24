@@ -3,9 +3,11 @@ import { DEFAULT_SETTINGS } from '../shared/constants';
 import { sendMessage, onMessage } from '../shared/messaging';
 import { GestureCapture } from './gesture-capture';
 import { ExclusionMatcher } from './exclusion-matcher';
+import { GoogleMapsLinks } from './google-maps-links';
 
 class ContentScript {
   private gestureCapture: GestureCapture | null = null;
+  private googleMapsLinks: GoogleMapsLinks | null = null;
   private settings: ExtensionSettings = DEFAULT_SETTINGS;
   private exclusionMatcher: ExclusionMatcher;
   
@@ -17,6 +19,12 @@ class ContentScript {
   private async initialize(): Promise<void> {
     try {
       await this.loadSettings();
+      this.setupMessageHandlers();
+      
+      // Exclusions apply to gestures only
+      if (GoogleMapsLinks.isGoogleHost()) {
+        this.googleMapsLinks = new GoogleMapsLinks(this.settings);
+      }
       
       // Check if current URL is excluded
       if (this.exclusionMatcher.isExcluded(window.location.href)) {
@@ -25,7 +33,6 @@ class ContentScript {
       }
       
       this.setupGestureCapture();
-      this.setupMessageHandlers();
     } catch (error) {
       console.error('ContentScript initialization failed:', error);
     }
@@ -40,6 +47,7 @@ class ContentScript {
       
       if (response?.success && response.data) {
         this.settings = response.data;
+        this.exclusionMatcher.updatePatterns(this.settings.exclusions);
       }
     } catch (error) {
       console.error('Failed to load settings:', error);
@@ -100,6 +108,7 @@ class ContentScript {
   private async handleSettingsUpdate(settings: ExtensionSettings): Promise<void> {
     this.settings = settings;
     this.exclusionMatcher.updatePatterns(settings.exclusions);
+    this.googleMapsLinks?.updateSettings(settings);
     
     // Check if current URL is now excluded
     if (this.exclusionMatcher.isExcluded(window.location.href)) {

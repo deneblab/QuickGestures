@@ -1,5 +1,5 @@
 import { ExtensionSettings, GestureContext, ActionType, GestureMapping, TabOpenPosition, TabOpenState, TabClosePosition } from '../shared/types';
-import { DEFAULT_SETTINGS, ACTION_LABELS } from '../shared/constants';
+import { DEFAULT_SETTINGS, DEFAULT_GOOGLE_MAPS, ACTION_LABELS } from '../shared/constants';
 import { sendMessage } from '../shared/messaging';
 import { convertGestureToArrows } from '../shared/utils';
 
@@ -114,6 +114,12 @@ class OptionsPage {
     const showGestureName = document.getElementById('showGestureName') as HTMLInputElement;
     showGestureName.addEventListener('change', async () => {
       this.settings.style.showGestureName = showGestureName.checked;
+      await this.saveSettings();
+    });
+    
+    const clickableMapPreview = document.getElementById('clickableMapPreview') as HTMLInputElement;
+    clickableMapPreview.addEventListener('change', async () => {
+      this.settings.googleMaps.clickableMapPreview = clickableMapPreview.checked;
       await this.saveSettings();
     });
     
@@ -317,6 +323,9 @@ class OptionsPage {
     const searchProvider = document.getElementById('searchProvider') as HTMLSelectElement;
     searchProvider.value = this.settings.search.provider;
     
+    const clickableMapPreview = document.getElementById('clickableMapPreview') as HTMLInputElement;
+    clickableMapPreview.checked = this.settings.googleMaps.clickableMapPreview;
+    
     const customSearchUrl = document.getElementById('customSearchUrl') as HTMLInputElement;
     customSearchUrl.value = this.settings.search.customUrl || '';
     
@@ -492,7 +501,8 @@ class OptionsPage {
       const imported = JSON.parse(text);
       
       if (this.validateSettings(imported)) {
-        this.settings = imported;
+        // Files exported before the Google Maps option existed have no googleMaps section
+        this.settings = { ...imported, googleMaps: imported.googleMaps ?? DEFAULT_GOOGLE_MAPS };
         await this.saveSettings();
         this.renderUI();
         alert('Settings imported successfully!');

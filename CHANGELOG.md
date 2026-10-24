@@ -4,8 +4,12 @@ All notable user-facing changes to QuickGestures are documented here.
 
 ## [Unreleased]
 
+### Added
+- Clickable map on Google Search: in the EU, clicking the map preview in Google results opens Google Maps in a new tab again (can be turned off in Search Engine settings)
+
 ### Fixed
 - The "reopen closed tab" gesture restores the last closed tab again
+- Sites added to the exclusion list are now excluded as soon as the page loads, not only after settings are changed
 - Excluding a site in settings now stops gestures on open pages right away
 - Searching selected text with the "Custom" search provider and no URL set falls back to Google instead of failing
 

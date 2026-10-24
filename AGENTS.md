@@ -28,7 +28,8 @@ src/
 │   ├── context-detector.ts  # Detect gesture context
 │   ├── overlay.ts           # Visual gesture feedback
 │   ├── gesture-recognition.ts # Pattern recognition
-│   └── exclusion-matcher.ts # URL exclusion logic
+│   ├── exclusion-matcher.ts # URL exclusion logic
+│   └── google-maps-links.ts # Clickable map preview on Google Search
 ├── options/             # Settings/configuration UI
 │   ├── options.html         # Settings page UI
 │   ├── options.ts           # Settings logic

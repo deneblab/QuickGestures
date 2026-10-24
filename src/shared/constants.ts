@@ -1,4 +1,4 @@
-import { ExtensionSettings, ContextMappings, ActionType, TabOrderSettings } from './types';
+import { ExtensionSettings, ContextMappings, ActionType, TabOrderSettings, GoogleMapsSettings } from './types';
 
 export const DEFAULT_STYLE = {
   lineColor: '#1E90FF',
@@ -32,6 +32,10 @@ export const DEFAULT_TAB_ORDER: TabOrderSettings = {
   openPosition: 'default',
   openState: 'default',
   closePosition: 'default'
+};
+
+export const DEFAULT_GOOGLE_MAPS: GoogleMapsSettings = {
+  clickableMapPreview: true
 };
 
 export const DEFAULT_EXCLUSIONS = [
@@ -75,9 +79,10 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   mappings: DEFAULT_MAPPINGS,
   search: DEFAULT_SEARCH,
   tabOrder: DEFAULT_TAB_ORDER,
+  googleMaps: DEFAULT_GOOGLE_MAPS,
   exclusions: DEFAULT_EXCLUSIONS,
   globalEnabled: true,
-  version: 2
+  version: 3
 };
 
 export const SEARCH_ENGINES = {

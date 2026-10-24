@@ -1,5 +1,5 @@
 import { ExtensionSettings } from '../shared/types';
-import { DEFAULT_SETTINGS, DEFAULT_TAB_ORDER, STORAGE_KEYS } from '../shared/constants';
+import { DEFAULT_SETTINGS, DEFAULT_TAB_ORDER, DEFAULT_GOOGLE_MAPS, STORAGE_KEYS } from '../shared/constants';
 
 export class StorageManager {
   async getSettings(): Promise<ExtensionSettings> {
@@ -44,6 +44,10 @@ export class StorageManager {
 
     if (!settings.tabOrder) {
       settings.tabOrder = DEFAULT_TAB_ORDER;
+    }
+
+    if (!settings.googleMaps) {
+      settings.googleMaps = DEFAULT_GOOGLE_MAPS;
     }
 
     const migrated: ExtensionSettings = {
