@@ -1,18 +1,28 @@
 name: Publish to Chrome Web Store
 
+# Manual only. A release created by release.yml cannot trigger this workflow
+# (events from GITHUB_TOKEN do not start other workflows), so a "release"
+# trigger would never fire.
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
-      target:
-        description: 'Publish target: default=public, or testers'
+      tag:
+        description: "Release tag to publish, e.g. v0.3.8 (empty = latest release)"
         required: false
-        default: 'testers'
+        default: ""
+        type: string
+      target:
+        description: "review = upload and submit for review (goes live after approval); draft = upload only"
+        required: true
+        default: "review"
         type: choice
         options:
-          - public
-          - testers
+          - review
+          - draft
+
+concurrency:
+  group: chrome-web-store
+  cancel-in-progress: false
 
 jobs:
   publish:
@@ -20,138 +30,90 @@ jobs:
     permissions:
       contents: read
 
+    env:
+      CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+      REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+      EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
+      PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
+      TAG: ${{ inputs.tag }}
+      TARGET: ${{ inputs.target }}
+
     steps:
-      - name: Download release asset (ZIP)
+      - name: Check Chrome Web Store secrets
+        run: |
+          MISSING=()
+          for name in CLIENT_ID CLIENT_SECRET REFRESH_TOKEN EXTENSION_ID PUBLISHER_ID; do
+            if [ -z "${!name}" ]; then
+              MISSING+=("CWS_$name")
+            fi
+          done
+
+          if [ ${#MISSING[@]} -gt 0 ]; then
+            echo "::error::Missing repository secrets: ${MISSING[*]}"
+            echo "Add them in Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+
+      - name: Download release asset (tag)
+        if: inputs.tag != ''
+        uses: robinraju/release-downloader@v1.13
+        with:
+          tag: ${{ inputs.tag }}
+          fileName: "quickgestures-*.zip"
+
+      - name: Download release asset (latest)
+        if: inputs.tag == ''
         uses: robinraju/release-downloader@v1.13
         with:
           latest: true
           fileName: "quickgestures-*.zip"
 
-      - name: Show downloaded files
-        run: ls -al
-
-      - name: Check Chrome Web Store secrets
-        id: check-secrets
+      - name: Select package
+        id: package
         run: |
-          echo "Checking required Chrome Web Store secrets..."
-          
-          # Check if all required secrets are set
-          MISSING_SECRETS=()
-          
-          if [ -z "${{ secrets.CWS_CLIENT_ID }}" ]; then
-            MISSING_SECRETS+=("CWS_CLIENT_ID")
+          shopt -s nullglob
+          ZIPS=(quickgestures-*.zip)
+          if [ ${#ZIPS[@]} -ne 1 ]; then
+            echo "::error::Expected exactly one quickgestures-*.zip, found ${#ZIPS[@]}: ${ZIPS[*]}"
+            exit 1
           fi
-          
-          if [ -z "${{ secrets.CWS_CLIENT_SECRET }}" ]; then
-            MISSING_SECRETS+=("CWS_CLIENT_SECRET")
-          fi
-          
-          if [ -z "${{ secrets.CWS_REFRESH_TOKEN }}" ]; then
-            MISSING_SECRETS+=("CWS_REFRESH_TOKEN")
-          fi
-          
-          if [ -z "${{ secrets.CWS_EXTENSION_ID }}" ]; then
-            MISSING_SECRETS+=("CWS_EXTENSION_ID")
-          fi
-          
-          if [ -z "${{ secrets.CWS_PUBLISHER_ID }}" ]; then
-            MISSING_SECRETS+=("CWS_PUBLISHER_ID")
-          fi
-          
-          if [ ${#MISSING_SECRETS[@]} -gt 0 ]; then
-            echo "❌ Missing required Chrome Web Store secrets:"
-            for secret in "${MISSING_SECRETS[@]}"; do
-              echo "  - $secret"
-            done
-            echo ""
-            echo "Please add these secrets in GitHub repository settings:"
-            echo "Settings → Secrets and variables → Actions → Repository secrets"
-            echo ""
-            echo "Required secrets for Chrome Web Store publishing:"
-            echo "- CWS_CLIENT_ID: OAuth2 client ID from Google Cloud Console"
-            echo "- CWS_CLIENT_SECRET: OAuth2 client secret"
-            echo "- CWS_REFRESH_TOKEN: OAuth2 refresh token"
-            echo "- CWS_EXTENSION_ID: Extension ID from Chrome Web Store"
-            echo "- CWS_PUBLISHER_ID: Publisher ID of your Chrome Web Store developer account"
-            echo ""
-            echo "⚠️  Skipping Chrome Web Store publishing due to missing secrets"
-            echo "SKIP_PUBLISH=true" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-          
-          echo "✅ All Chrome Web Store secrets are configured"
+          echo "file=${ZIPS[0]}" >> "$GITHUB_OUTPUT"
+          echo "Package: ${ZIPS[0]}"
 
       - name: Install chrome-webstore-upload-cli
-        if: steps.check-secrets.outputs.SKIP_PUBLISH != 'true'
-        run: npm i -g chrome-webstore-upload-cli
+        run: npm i -g chrome-webstore-upload-cli@4.0.2
 
-      - name: Upload package to CWS (draft)
-        if: steps.check-secrets.outputs.SKIP_PUBLISH != 'true'
-        env:
-          CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
-          REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
-          EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
-          PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
+      - name: Upload package
         run: |
-          npx chrome-webstore-upload upload \
-            --source "$(ls quickgestures-*.zip)" \
+          chrome-webstore-upload upload \
+            --source "${{ steps.package.outputs.file }}" \
             --extension-id "$EXTENSION_ID"
 
-      - name: Publish (channel)
-        if: steps.check-secrets.outputs.SKIP_PUBLISH != 'true'
-        env:
-          CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
-          REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
-          EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
-          PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
-          TARGET: ${{ github.event.inputs.target || 'public' }}
+      - name: Submit for review
+        if: inputs.target == 'review'
         run: |
-          echo "🚀 Attempting to publish to Chrome Web Store (target: $TARGET)"
-          
-          if [ "$TARGET" = "testers" ]; then
-            # The Chrome Web Store API v2 rejects the TRUSTED_TESTERS publish type,
-            # so the upload stays a draft. Publish it from the Developer Dashboard.
-            echo "ℹ️  Target 'testers': upload finished, package left as a draft."
-            echo "   Publish it from https://chrome.google.com/webstore/devconsole"
-            exit 0
-          fi
-
-          PUBLISH_RESULT=$(npx chrome-webstore-upload publish \
-            --extension-id "$EXTENSION_ID" 2>&1) || PUBLISH_EXIT_CODE=$?
-          
-          if [ ${PUBLISH_EXIT_CODE:-0} -eq 0 ]; then
-            echo "✅ Successfully published to Chrome Web Store"
-            echo "$PUBLISH_RESULT"
-          else
-            echo "⚠️ Chrome Web Store publish failed:"
-            echo "$PUBLISH_RESULT"
-            
-            # Check for common setup issues
-            if echo "$PUBLISH_RESULT" | grep -q "privacy"; then
-              echo ""
-              echo "🔧 SETUP REQUIRED: Privacy practices not configured"
-              echo "📖 See: docs/CHROME_STORE_SETUP.md for complete setup guide"
-              echo "🔗 Chrome Web Store Developer Dashboard: https://chrome.google.com/webstore/devconsole"
-              echo ""
-              echo "Required actions:"
-              echo "1. Complete Privacy practices tab in Developer Dashboard"
-              echo "2. Add justification for remote code use"
-              echo "3. Add justification for host permission use" 
-              echo "4. Certify data usage compliance"
-              echo ""
-              echo "⏭️  Upload was successful - publish will work after setup"
-              exit 0
-            elif echo "$PUBLISH_RESULT" | grep -q "Bad Request"; then
-              echo ""
-              echo "🔧 Chrome Web Store configuration required"
-              echo "📖 Check docs/CHROME_STORE_SETUP.md for troubleshooting"
-              exit 0
+          if ! RESULT=$(chrome-webstore-upload publish --extension-id "$EXTENSION_ID" 2>&1); then
+            echo "$RESULT"
+            if echo "$RESULT" | grep -qi "privacy"; then
+              echo "::error::Privacy practices are incomplete. Fill in the Privacy practices tab in the Developer Dashboard: https://chrome.google.com/webstore/devconsole"
             else
-              echo ""
-              echo "❌ Unexpected publish error - please check Chrome Web Store status"
-              exit 1
+              echo "::error::Submitting for review failed. The upload succeeded and stays as a draft; check the Developer Dashboard."
             fi
+            exit 1
           fi
+          echo "$RESULT"
 
+      - name: Summary
+        if: success()
+        run: |
+          {
+            echo "### Chrome Web Store"
+            echo "- Package: \`${{ steps.package.outputs.file }}\`"
+            echo "- Release: ${TAG:-latest}"
+            if [ "$TARGET" = "review" ]; then
+              echo "- Submitted for review; it goes live automatically after approval."
+            else
+              echo "- Uploaded as a draft. Submit it from https://chrome.google.com/webstore/devconsole"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
