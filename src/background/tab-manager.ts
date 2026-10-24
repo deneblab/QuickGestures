@@ -72,8 +72,9 @@ export class TabManager {
     const sessions = await chrome.sessions.getRecentlyClosed({ maxResults: 1 });
     const session = sessions[0];
     
-    if (session?.tab) {
-      return await chrome.sessions.restore(session.sessionId);
+    if (session?.tab?.sessionId) {
+      const restored = await chrome.sessions.restore(session.tab.sessionId);
+      return restored.tab ?? null;
     }
     
     return null;

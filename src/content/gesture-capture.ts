@@ -20,6 +20,15 @@ export class GestureCapture {
   private dragTextEffect: DragTextEffect;
   private gestureNameDisplay: GestureNameDisplay;
   private lastRecognitionTime: number = 0;
+  // Bound once so destroy() removes the same listener references that were added
+  private readonly listeners: [keyof DocumentEventMap, EventListener][] = [
+    ['mousedown', this.handleMouseDown.bind(this) as EventListener],
+    ['mousemove', this.handleMouseMove.bind(this) as EventListener],
+    ['mouseup', this.handleMouseUp.bind(this) as EventListener],
+    ['click', this.handleClick.bind(this) as EventListener],
+    ['contextmenu', this.handleContextMenu.bind(this) as EventListener],
+    ['dragstart', this.handleDragStart.bind(this) as EventListener]
+  ];
   private onGestureRecognized: (
     context: string,
     gesture: string,
@@ -67,12 +76,7 @@ export class GestureCapture {
   }
   
   private setupEventListeners(): void {
-    document.addEventListener('mousedown', this.handleMouseDown.bind(this), true);
-    document.addEventListener('mousemove', this.handleMouseMove.bind(this), true);
-    document.addEventListener('mouseup', this.handleMouseUp.bind(this), true);
-    document.addEventListener('click', this.handleClick.bind(this), true);
-    document.addEventListener('contextmenu', this.handleContextMenu.bind(this), true);
-    document.addEventListener('dragstart', this.handleDragStart.bind(this), true);
+    this.listeners.forEach(([type, listener]) => document.addEventListener(type, listener, true));
   }
   
   private handleMouseDown(event: MouseEvent): void {
@@ -377,12 +381,7 @@ export class GestureCapture {
   }
   
   destroy(): void {
-    document.removeEventListener('mousedown', this.handleMouseDown.bind(this), true);
-    document.removeEventListener('mousemove', this.handleMouseMove.bind(this), true);
-    document.removeEventListener('mouseup', this.handleMouseUp.bind(this), true);
-    document.removeEventListener('click', this.handleClick.bind(this), true);
-    document.removeEventListener('contextmenu', this.handleContextMenu.bind(this), true);
-    document.removeEventListener('dragstart', this.handleDragStart.bind(this), true);
+    this.listeners.forEach(([type, listener]) => document.removeEventListener(type, listener, true));
     
     this.overlay.hide();
     this.restoreOriginalCursor();

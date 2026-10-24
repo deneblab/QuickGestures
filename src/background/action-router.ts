@@ -170,8 +170,9 @@ export class ActionRouter {
     if (settings.search.provider === 'custom' && settings.search.customUrl) {
       searchUrl = createSearchUrl(text, settings.search.customUrl);
     } else {
-      const template = SEARCH_ENGINES[settings.search.provider];
-      searchUrl = createSearchUrl(text, template);
+      // A custom provider without a URL falls back to Google
+      const provider = settings.search.provider === 'custom' ? 'google' : settings.search.provider;
+      searchUrl = createSearchUrl(text, SEARCH_ENGINES[provider]);
     }
     
     await this.tabManager.openUrl(searchUrl, target);

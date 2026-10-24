@@ -4,6 +4,11 @@ All notable user-facing changes to QuickGestures are documented here.
 
 ## [Unreleased]
 
+### Fixed
+- The "reopen closed tab" gesture restores the last closed tab again
+- Excluding a site in settings now stops gestures on open pages right away
+- Searching selected text with the "Custom" search provider and no URL set falls back to Google instead of failing
+
 ### Changed
 - Removed the unused `activeTab` permission; the extension now requests fewer permissions
 
