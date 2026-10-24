@@ -4,6 +4,9 @@ All notable user-facing changes to QuickGestures are documented here.
 
 ## [Unreleased]
 
+### Fixed
+- Sites added to the exclusion list are now excluded as soon as the page loads, not only after settings are changed
+
 ### Changed
 - Removed the unused `activeTab` permission; the extension now requests fewer permissions
 

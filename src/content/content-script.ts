@@ -17,6 +17,7 @@ class ContentScript {
   private async initialize(): Promise<void> {
     try {
       await this.loadSettings();
+      this.setupMessageHandlers();
       
       // Check if current URL is excluded
       if (this.exclusionMatcher.isExcluded(window.location.href)) {
@@ -25,7 +26,6 @@ class ContentScript {
       }
       
       this.setupGestureCapture();
-      this.setupMessageHandlers();
     } catch (error) {
       console.error('ContentScript initialization failed:', error);
     }
@@ -40,6 +40,7 @@ class ContentScript {
       
       if (response?.success && response.data) {
         this.settings = response.data;
+        this.exclusionMatcher.updatePatterns(this.settings.exclusions);
       }
     } catch (error) {
       console.error('Failed to load settings:', error);
