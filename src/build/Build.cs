@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Deneblab.AbcVersion;
@@ -34,9 +35,13 @@ partial class Build : FalloutBuild
             OutputDirectory.DeleteDirectory();
         });
 
-    // Locally node_modules is managed with npm install; the sandbox shares it with Windows, so it must not be reinstalled here
+    // npm creates tsc.cmd only on Windows; a node_modules installed on Linux has no .cmd shims and the wrong native binaries
+    AbsolutePath TscShim => RootDirectory / "node_modules" / ".bin" / (OperatingSystem.IsWindows() ? "tsc.cmd" : "tsc");
+
+    // Locally node_modules is managed with npm install and shared between Windows and the sandbox,
+    // so it is only (re)installed when missing or installed for another OS
     Target Restore => _ => _
-        .OnlyWhenDynamic(() => IsServerBuild || !(RootDirectory / "node_modules").DirectoryExists())
+        .OnlyWhenDynamic(() => IsServerBuild || !TscShim.FileExists())
         .Executes(() =>
         {
             NpmTasks.NpmCi(s => s.SetProcessWorkingDirectory(RootDirectory));
