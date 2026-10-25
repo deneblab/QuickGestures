@@ -4,6 +4,8 @@ All notable user-facing changes to QuickGestures are documented here.
 
 ## [Unreleased]
 
+## [0.4.0]
+
 ### Added
 - Clickable map on Google Search: in the EU, clicking the map preview in Google results, or the pin button in its corner, opens Google Maps in a new tab again (can be turned off in Search Engine settings)
 
