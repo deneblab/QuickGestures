@@ -130,6 +130,10 @@ export class TabManager {
     }
   }
   
+  async navigate(tabId: number, url: string): Promise<void> {
+    await chrome.tabs.update(tabId, { url });
+  }
+  
   async openUrl(url: string, target: 'background' | 'foreground' | 'window'): Promise<void> {
     switch (target) {
       case 'background':

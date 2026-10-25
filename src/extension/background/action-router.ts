@@ -135,12 +135,12 @@ export class ActionRouter {
         
       case 'search_text_new':
         if (!selectedText) throw new Error('Selected text required');
-        await this.searchText(selectedText, 'background', settings);
+        await this.searchText(selectedText, 'background', tabId, settings);
         break;
         
       case 'search_text_current':
         if (!selectedText) throw new Error('Selected text required');
-        await this.searchText(selectedText, 'foreground', settings);
+        await this.searchText(selectedText, 'current', tabId, settings);
         break;
         
       case 'copy_text':
@@ -158,7 +158,8 @@ export class ActionRouter {
   
   private async searchText(
     text: string,
-    target: 'background' | 'foreground',
+    target: 'background' | 'current',
+    tabId: number,
     settings?: ExtensionSettings
   ): Promise<void> {
     if (!settings) {
@@ -175,6 +176,10 @@ export class ActionRouter {
       searchUrl = createSearchUrl(text, SEARCH_ENGINES[provider]);
     }
     
-    await this.tabManager.openUrl(searchUrl, target);
+    if (target === 'current') {
+      await this.tabManager.navigate(tabId, searchUrl);
+    } else {
+      await this.tabManager.openUrl(searchUrl, target);
+    }
   }
 }

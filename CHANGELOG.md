@@ -13,6 +13,7 @@ All notable user-facing changes to QuickGestures are documented here.
 - Excluding a site in settings now stops gestures on open pages right away
 - Searching selected text with the "Custom" search provider and no URL set falls back to Google instead of failing
 - Right-click page gestures now work on macOS and Linux, where the context menu used to open as soon as the button was pressed; to open the context menu there, right-click twice in quick succession
+- The "Search Text in Current Tab" gesture opens the search in the current tab instead of a new one
 
 ### Changed
 - Removed the unused `activeTab` permission; the extension now requests fewer permissions
