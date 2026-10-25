@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Deneblab.AbcVersion;
@@ -35,16 +36,26 @@ partial class Build : FalloutBuild
             OutputDirectory.DeleteDirectory();
         });
 
-    // npm creates tsc.cmd only on Windows; a node_modules installed on Linux has no .cmd shims and the wrong native binaries
-    AbsolutePath TscShim => RootDirectory / "node_modules" / ".bin" / (OperatingSystem.IsWindows() ? "tsc.cmd" : "tsc");
+    AbsolutePath NodeModulesDirectory => RootDirectory / "node_modules";
+
+    // This machine's platform in npm's terms (process.platform and process.arch)
+    static string NpmOs => OperatingSystem.IsWindows() ? "win32" : OperatingSystem.IsMacOS() ? "darwin" : "linux";
+    static string NpmCpu => RuntimeInformation.OSArchitecture.ToString().ToLowerInvariant();
+
+    // TypeScript 7 runs a native binary from a per-platform package (e.g. @typescript/typescript-win32-x64);
+    // its presence tells whether node_modules was installed for this OS and architecture
+    AbsolutePath TscNativePackage => NodeModulesDirectory / "@typescript" / $"typescript-{NpmOs}-{NpmCpu}";
 
     // Locally node_modules is managed with npm install and shared between Windows and the sandbox,
-    // so it is only (re)installed when missing or installed for another OS
+    // so it is only (re)installed when missing or installed for another OS. --os and --cpu override
+    // an os/cpu set in a user .npmrc, which would install the native binaries of another platform
     Target Restore => _ => _
-        .OnlyWhenDynamic(() => IsServerBuild || !TscShim.FileExists())
+        .OnlyWhenDynamic(() => IsServerBuild || !TscNativePackage.DirectoryExists())
         .Executes(() =>
         {
-            NpmTasks.NpmCi(s => s.SetProcessWorkingDirectory(RootDirectory));
+            NpmTasks.NpmCi(s => s
+                .SetProcessWorkingDirectory(RootDirectory)
+                .AddProcessAdditionalArguments($"--os={NpmOs}", $"--cpu={NpmCpu}"));
         });
 
     Target ShowVersion => _ => _
