@@ -40,7 +40,7 @@ partial class Build
 
             // The store only gets packages that were released on GitHub
             StoreDirectory.CreateOrCleanDirectory();
-            Gh($"release download {ReleaseTag} --pattern \"quickgestures-*.zip\" --dir \"{StoreDirectory}\"");
+            Gh($"release download {ReleaseTag} --pattern \"quickgestures-*.zip\" --dir {StoreDirectory}");
             var package = StoreDirectory.GlobFiles("quickgestures-*.zip").Single();
             Log.Information("Package: {File}", package.Name);
 
@@ -53,7 +53,7 @@ partial class Build
 
     void ChromeWebStore(string arguments)
     {
-        NpmTasks.Npm($"exec --yes --package={ChromeWebStoreCli} -- chrome-webstore-upload {arguments}", workingDirectory: RootDirectory);
+        NpmTasks.Npm($"exec --yes --package={ChromeWebStoreCli} -- chrome-webstore-upload {arguments:nq}", workingDirectory: RootDirectory);
     }
 
     // Versions of the live and of the submitted revision (Chrome Web Store API v2 fetchStatus)

@@ -70,10 +70,10 @@ partial class Build
                 Log.Information("Tag {Tag} already points at HEAD, creating only the release", ReleaseTag);
             }
 
+            // Interpolated values are quoted by Fallout when needed, so no quotes around them here
             var title = $"QuickGestures {ReleaseTag}";
-            var assets = $"\"{PackageFile}\" \"{ReleaseNotesFile}\"";
             var prerelease = Version.Contains("alpha") || Version.Contains("beta") ? " --prerelease" : "";
-            Gh($"release create {ReleaseTag} {assets} --verify-tag --title \"{title}\" --notes-file \"{ReleaseNotesFile}\"{prerelease}");
+            Gh($"release create {ReleaseTag} {PackageFile} {ReleaseNotesFile} --verify-tag --title {title} --notes-file {ReleaseNotesFile}{prerelease:nq}");
         });
 
     string[] GetCommitsSinceLastTag()
