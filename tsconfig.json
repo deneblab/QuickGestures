@@ -11,8 +11,8 @@
     "resolveJsonModule": true,
     "types": ["chrome", "node"],
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src/extension"
   },
-  "include": ["src/**/*"],
+  "include": ["src/extension/**/*"],
   "exclude": ["node_modules", "dist"]
 }

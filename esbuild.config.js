@@ -17,17 +17,17 @@ const copyAssets = () => {
     fs.mkdirSync('dist', { recursive: true });
   }
   
-  copyFile('manifest.json', 'dist/manifest.json');
+  copyFile('src/extension/manifest.json', 'dist/manifest.json');
   
-  if (fs.existsSync('src/options/options.html')) {
-    copyFile('src/options/options.html', 'dist/options/options.html');
+  if (fs.existsSync('src/extension/options/options.html')) {
+    copyFile('src/extension/options/options.html', 'dist/options/options.html');
   }
   
-  if (fs.existsSync('src/options/options.css')) {
-    copyFile('src/options/options.css', 'dist/options/options.css');
+  if (fs.existsSync('src/extension/options/options.css')) {
+    copyFile('src/extension/options/options.css', 'dist/options/options.css');
   }
   
-  if (fs.existsSync('src/assets')) {
+  if (fs.existsSync('src/extension/assets')) {
     const copyDir = (src, dest) => {
       if (!fs.existsSync(dest)) {
         fs.mkdirSync(dest, { recursive: true });
@@ -43,7 +43,7 @@ const copyAssets = () => {
         }
       }
     };
-    copyDir('src/assets', 'dist/assets');
+    copyDir('src/extension/assets', 'dist/assets');
   }
 };
 
@@ -58,21 +58,21 @@ const commonOptions = {
 
 const serviceWorkerOptions = {
   ...commonOptions,
-  entryPoints: ['src/background/service-worker.ts'],
+  entryPoints: ['src/extension/background/service-worker.ts'],
   outfile: 'dist/background/service-worker.js',
   format: 'iife'
 };
 
 const contentScriptOptions = {
   ...commonOptions,
-  entryPoints: ['src/content/content-script.ts'],
+  entryPoints: ['src/extension/content/content-script.ts'],
   outfile: 'dist/content/content-script.js',
   format: 'iife'
 };
 
 const optionsOptions = {
   ...commonOptions,
-  entryPoints: ['src/options/options.ts'],
+  entryPoints: ['src/extension/options/options.ts'],
   outfile: 'dist/options/options.js',
   format: 'iife'
 };
