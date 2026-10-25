@@ -146,7 +146,7 @@ A powerful Chrome extension that brings fluid mouse gesture navigation to your b
 ## 🛠️ Development
 
 ### Prerequisites
-- Node.js 22+
+- Node.js 24+ (latest LTS)
 - npm or yarn
 - Chrome browser
 - .NET 10 SDK for the full build (`build.cmd` / `build.sh` installs a local copy if it is missing)

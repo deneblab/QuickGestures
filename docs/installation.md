@@ -7,7 +7,7 @@
 
 ### Prerequisites
 - Google Chrome browser
-- Node.js 22+ (for building from source)
+- Node.js 24+ (latest LTS) (for building from source)
 - Basic command line knowledge
 
 ### Step 1: Get the Code
@@ -48,7 +48,7 @@ To also create the release zip (`output/quickgestures-v<version>.zip`), run the 
 ### Extension Not Loading
 - **Check Developer Mode**: Make sure it's enabled in `chrome://extensions/`
 - **Build Issues**: Run `npm run clean && npm run build` to rebuild
-- **Node Version**: Ensure Node.js 22+ is installed
+- **Node Version**: Ensure Node.js 24+ (latest LTS) is installed
 
 ### Gestures Not Working
 - **Check Extension Status**: Ensure it's enabled in `chrome://extensions/`
