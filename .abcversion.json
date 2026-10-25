@@ -1,3 +1,9 @@
 {
-  "BaseVersion": "0.3.0"
+  "BaseVersion": "0.3.0",
+  "Branches": {
+    "production": {
+      "Version": "0.4.0",
+      "ParentSha": "d59c9a89932cd60909dded3c9a5260f7819f87db"
+    }
+  }
 }
