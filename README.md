@@ -126,7 +126,7 @@ A powerful Chrome extension that brings fluid mouse gesture navigation to your b
 - **Show Gesture Name**: Real-time gesture name display
 
 ### Context Controls
-- **Page Gestures**: Enable/disable right-click gestures
+- **Page Gestures**: Enable/disable right-click gestures (on macOS and Linux, right-click twice quickly to open the context menu)
 - **Link Gestures**: Enable/disable link-specific actions
 - **Selection Gestures**: Enable/disable text selection actions
 - **Movement Thresholds**: Adjust sensitivity settings

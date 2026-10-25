@@ -7,6 +7,8 @@ import { GestureRecognizer } from './gesture-recognition';
 import { DragTextEffect } from './drag-text-effect';
 import { GestureNameDisplay } from './gesture-name-display';
 
+const CONTEXT_MENU_DOUBLE_CLICK_MS = 500;
+
 export class GestureCapture {
   private state: GestureState;
   private settings: ExtensionSettings;
@@ -20,6 +22,10 @@ export class GestureCapture {
   private dragTextEffect: DragTextEffect;
   private gestureNameDisplay: GestureNameDisplay;
   private lastRecognitionTime: number = 0;
+  // On macOS and Linux the context menu opens on mousedown, so it is held back while a page gesture
+  // is captured; a second right-click soon after a release without a gesture lets it open
+  private contextMenuSuppressed: boolean = false;
+  private contextMenuRequestedAt: number = 0;
   // Bound once so destroy() removes the same listener references that were added
   private readonly listeners: [keyof DocumentEventMap, EventListener][] = [
     ['mousedown', this.handleMouseDown.bind(this) as EventListener],
@@ -104,6 +110,11 @@ export class GestureCapture {
       }
     } else if (button === 2) {
       if (!this.settings.activation.pageEnabled) return;
+      
+      if (Date.now() - this.contextMenuRequestedAt < CONTEXT_MENU_DOUBLE_CLICK_MS) {
+        this.contextMenuRequestedAt = 0;
+        return;
+      }
     }
     
     const modifierPressed = this.contextDetector.isModifierPressed(event, requiredModifier as any);
@@ -241,8 +252,13 @@ export class GestureCapture {
     }
     
     const gesture = this.recognizer.recognizeGesture(this.state.currentPath);
+    const isGesture = gesture !== '' && this.recognizer.isValidGesture(gesture);
     
-    if (gesture && this.recognizer.isValidGesture(gesture)) {
+    if (!isGesture && this.contextMenuSuppressed) {
+      this.contextMenuRequestedAt = Date.now();
+    }
+    
+    if (isGesture) {
       const linkHref = this.state.linkElement?.href;
       const selectedText = this.state.selectedText;
       
@@ -272,15 +288,11 @@ export class GestureCapture {
     
     if (!this.state.isCapturing) return;
     
+    // Only on macOS and Linux: on Windows the menu comes after mouseup, when capturing has ended
     if (this.state.context === 'page') {
-      const distanceMoved = this.state.startPoint 
-        ? distance(this.state.startPoint, this.createPoint(event))
-        : 0;
-        
-      if (distanceMoved >= this.settings.activation.pageThresholdPx) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
+      event.preventDefault();
+      event.stopPropagation();
+      this.contextMenuSuppressed = true;
     }
   }
   
@@ -331,6 +343,7 @@ export class GestureCapture {
     };
     
     this.overlayStarted = false;
+    this.contextMenuSuppressed = false;
     this.overlay.endPath();
     this.restoreOriginalCursor();
     this.dragTextEffect.endDrag();
