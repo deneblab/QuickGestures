@@ -4,7 +4,7 @@
 
 A powerful Chrome extension that brings fluid mouse gesture navigation to your browser. Draw simple patterns to navigate, manage tabs, search text, and control your browsing experience like never before.
 
-[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-4285f4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://chrome.google.com/webstore)
+[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-4285f4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/quickgestures-mouse-gestu/pcjhlmapdjmleefnjjmhllpajfbibkfe)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)]()
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-green?style=for-the-badge)]()
 
@@ -47,7 +47,7 @@ A powerful Chrome extension that brings fluid mouse gesture navigation to your b
 
 ## 🚀 Quick Start
 
-Install QuickGestures from the Chrome Web Store, or see the [installation guide](https://deneblab.github.io/QuickGestures/installation) for all options. To build it yourself:
+Install QuickGestures from the [Chrome Web Store](https://chromewebstore.google.com/detail/quickgestures-mouse-gestu/pcjhlmapdjmleefnjjmhllpajfbibkfe), or see the [installation guide](https://deneblab.github.io/QuickGestures/installation) for all options. To build it yourself:
 
 ### Installation
 1. **Clone the repository**
@@ -228,6 +228,14 @@ Read the full [privacy policy](https://deneblab.github.io/QuickGestures/privacy-
 ## 📜 License
 
 MIT License - see [LICENSE](LICENSE) file for details.
+
+---
+
+## 🔗 Links
+
+- [QuickGestures in the Chrome Web Store](https://chromewebstore.google.com/detail/quickgestures-mouse-gestu/pcjhlmapdjmleefnjjmhllpajfbibkfe)
+- [Website](https://deneblab.github.io/QuickGestures/)
+- [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole/) (for maintainers)
 
 ---
 

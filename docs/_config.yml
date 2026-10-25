@@ -6,7 +6,7 @@ url: https://deneblab.github.io
 repository_url: https://github.com/deneblab/QuickGestures
 
 # Chrome Web Store page of the extension; while empty, "Add to Chrome" buttons lead to the installation guide
-chrome_web_store_url: ""
+chrome_web_store_url: "https://chromewebstore.google.com/detail/quickgestures-mouse-gestu/pcjhlmapdjmleefnjjmhllpajfbibkfe"
 
 defaults:
   - scope:
