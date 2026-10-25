@@ -1,0 +1,4 @@
+# GitHub Pages (Jekyll) settings for https://deneblab.github.io/QuickGestures/
+# store/ holds Chrome Web Store listing material, not pages of the site
+exclude:
+  - store

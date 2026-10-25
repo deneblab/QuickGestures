@@ -282,6 +282,7 @@ refactor: simplify message passing between scripts
 ### Release Workflow
 - **Production branch**: For stable releases
 - **GitHub Actions**: `release.yml` creates a release on every push to `production`; `publish-chrome.yml` (manual, no inputs) releases HEAD if needed and submits it to the Chrome Web Store for review. Both share the `release` concurrency group. Dependabot updates actions, npm and NuGet weekly
+- **GitHub Pages**: `pages.yml` publishes `docs/` (privacy policy for the Chrome Web Store, installation guide) to https://deneblab.github.io/QuickGestures/ when `docs/**` changes on `production`; `docs/store/` is excluded by `docs/_config.yml`
 - **Version**: calculated by abcversion (BaseVersion in .abcversion.json) in the Fallout build and written only into `dist/manifest.json`; the versions in `src/extension/manifest.json` and `package.json` are not updated
 
 ## 🚀 Success Metrics for Agents
