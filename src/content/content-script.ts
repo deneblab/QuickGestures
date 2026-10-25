@@ -7,11 +7,12 @@ import { GoogleMapsLinks } from './google-maps-links';
 
 class ContentScript {
   private gestureCapture: GestureCapture | null = null;
-  private googleMapsLinks: GoogleMapsLinks | null = null;
+  private googleMapsLinks: GoogleMapsLinks | null;
   private settings: ExtensionSettings = DEFAULT_SETTINGS;
   private exclusionMatcher: ExclusionMatcher;
   
-  constructor() {
+  constructor(googleMapsLinks: GoogleMapsLinks | null) {
+    this.googleMapsLinks = googleMapsLinks;
     this.exclusionMatcher = new ExclusionMatcher(DEFAULT_SETTINGS.exclusions);
     this.initialize();
   }
@@ -22,9 +23,7 @@ class ContentScript {
       this.setupMessageHandlers();
       
       // Exclusions apply to gestures only
-      if (GoogleMapsLinks.isGoogleHost()) {
-        this.googleMapsLinks = new GoogleMapsLinks(this.settings);
-      }
+      this.googleMapsLinks?.updateSettings(this.settings);
       
       // Check if current URL is excluded
       if (this.exclusionMatcher.isExcluded(window.location.href)) {
@@ -128,8 +127,11 @@ class ContentScript {
   }
 }
 
+// Started at document_start, before Google's scripts, so its listeners run before Google's own
+const googleMapsLinks = GoogleMapsLinks.isGoogleHost() ? new GoogleMapsLinks(DEFAULT_SETTINGS) : null;
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => new ContentScript());
+  document.addEventListener('DOMContentLoaded', () => new ContentScript(googleMapsLinks));
 } else {
-  new ContentScript();
+  new ContentScript(googleMapsLinks);
 }
