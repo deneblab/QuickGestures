@@ -7,215 +7,243 @@
     <link rel="stylesheet" href="options.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>QuickGestures Options</h1>
-            <div class="global-toggle">
-                <label class="switch">
-                    <input type="checkbox" id="globalEnabled">
-                    <span class="slider"></span>
-                </label>
-                <span>Extension Enabled</span>
-            </div>
-        </header>
+    <header class="header">
+        <div class="brand">
+            <img src="../assets/icons/icon-32.png" width="32" height="32" alt="">
+            <h1>QuickGestures</h1>
+        </div>
+        <label class="global-toggle">
+            <span>Extension enabled</span>
+            <span class="switch">
+                <input type="checkbox" id="globalEnabled" role="switch">
+                <span class="slider"></span>
+            </span>
+        </label>
+    </header>
 
-        <div class="main">
-            <nav class="sidebar">
-                <ul class="nav-list">
-                    <li class="nav-item active" data-section="mappings">
-                        <span class="nav-icon">
-                            <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3 10C3 10 5.5 7 10 7C14.5 7 17 10 17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M7 13L10 16L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
-                            </svg>
-                        </span>
+    <div class="main">
+        <nav class="sidebar" aria-label="Settings sections">
+            <ul class="nav-list">
+                <li>
+                    <button type="button" class="nav-item active" data-section="mappings" aria-current="page">
+                        <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <path d="M3 10C3 10 5.5 7 10 7C14.5 7 17 10 17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M7 13L10 16L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+                        </svg>
                         Gesture Mappings
-                    </li>
-                    <li class="nav-item" data-section="style">
-                        <span class="nav-icon">
-                            <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="10" cy="8" r="5" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M7 10L10 13L13 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <rect x="2" y="15" width="16" height="2" rx="1" fill="currentColor"/>
-                            </svg>
-                        </span>
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="nav-item" data-section="style">
+                        <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <circle cx="10" cy="8" r="5" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="M7 10L10 13L13 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <rect x="2" y="15" width="16" height="2" rx="1" fill="currentColor"/>
+                        </svg>
                         Appearance
-                    </li>
-                    <li class="nav-item" data-section="contexts">
-                        <span class="nav-icon">
-                            <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <circle cx="10" cy="4" r="1" fill="currentColor"/>
-                                <circle cx="16" cy="10" r="1" fill="currentColor"/>
-                                <circle cx="10" cy="16" r="1" fill="currentColor"/>
-                                <circle cx="4" cy="10" r="1" fill="currentColor"/>
-                            </svg>
-                        </span>
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="nav-item" data-section="contexts">
+                        <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            <circle cx="10" cy="4" r="1" fill="currentColor"/>
+                            <circle cx="16" cy="10" r="1" fill="currentColor"/>
+                            <circle cx="10" cy="16" r="1" fill="currentColor"/>
+                            <circle cx="4" cy="10" r="1" fill="currentColor"/>
+                        </svg>
                         Contexts
-                    </li>
-                    <li class="nav-item" data-section="search">
-                        <span class="nav-icon">
-                            <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="8.5" cy="8.5" r="4.5" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M12.5 12.5L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </span>
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="nav-item" data-section="search">
+                        <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <circle cx="8.5" cy="8.5" r="4.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="M12.5 12.5L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
                         Search Engine
-                    </li>
-                    <li class="nav-item" data-section="taborder">
-                        <span class="nav-icon">
-                            <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="2" y="3" width="16" height="3" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <rect x="2" y="8.5" width="16" height="3" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <rect x="2" y="14" width="16" height="3" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <path d="M13 4.5L15 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                                <path d="M13 10L15 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                            </svg>
-                        </span>
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="nav-item" data-section="taborder">
+                        <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <rect x="2" y="3" width="16" height="3" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            <rect x="2" y="8.5" width="16" height="3" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            <rect x="2" y="14" width="16" height="3" rx="1" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            <path d="M13 4.5L15 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M13 10L15 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
                         Tab Order
-                    </li>
-                    <li class="nav-item" data-section="exclusions">
-                        <span class="nav-icon">
-                            <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M6 6L14 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </span>
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="nav-item" data-section="exclusions">
+                        <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="M6 6L14 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
                         Exclusions
-                    </li>
-                    <li class="nav-item" data-section="utilities">
-                        <span class="nav-icon">
-                            <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12.5 2L17 6.5L12.5 11L8 6.5L12.5 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M6 8L3 11L6 14L9 11L6 8Z" stroke="currentColor" stroke-width="2" fill="none"/>
-                                <path d="M9 12L11 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M14 9L16 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </span>
+                    </button>
+                </li>
+                <li>
+                    <button type="button" class="nav-item" data-section="utilities">
+                        <svg class="nav-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <path d="M12.5 2L17 6.5L12.5 11L8 6.5L12.5 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="M6 8L3 11L6 14L9 11L6 8Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="M9 12L11 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M14 9L16 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
                         Utilities
-                    </li>
-                </ul>
-            </nav>
+                    </button>
+                </li>
+            </ul>
+        </nav>
 
-            <main class="content">
-                <!-- Mappings Section -->
-                <section id="mappings-section" class="section active">
+        <main class="content">
+            <!-- Mappings Section -->
+            <section id="mappings-section" class="section active">
+                <header class="section-header">
                     <h2>Gesture Mappings</h2>
-                    <div class="context-switcher">
-                        <div class="context-tabs">
-                            <button class="context-tab active" data-context="page">Page Gestures</button>
-                            <button class="context-tab" data-context="link">Link Gestures</button>
-                            <button class="context-tab" data-context="selection">Selection Gestures</button>
-                        </div>
+                    <p>Choose what each gesture does. Draw on a page with the right mouse button, or drag a link or selected text with the left one.</p>
+                </header>
+                <div class="card">
+                    <div class="context-tabs" role="tablist" aria-label="Gesture context">
+                        <button type="button" class="context-tab active" data-context="page" role="tab" aria-selected="true">Page</button>
+                        <button type="button" class="context-tab" data-context="link" role="tab" aria-selected="false">Link</button>
+                        <button type="button" class="context-tab" data-context="selection" role="tab" aria-selected="false">Selection</button>
                     </div>
                     <div id="mappings-container">
                         <!-- Mappings table will be generated here -->
                     </div>
-                    <div class="add-mapping">
-                        <button id="add-mapping-btn" class="btn btn-primary">Add New Mapping</button>
+                    <div class="card-actions">
+                        <button type="button" id="add-mapping-btn" class="btn btn-primary">Add mapping</button>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <!-- Style Section -->
-                <section id="style-section" class="section">
+            <!-- Style Section -->
+            <section id="style-section" class="section">
+                <header class="section-header">
                     <h2>Appearance</h2>
-                    <div class="setting-group">
-                        <label for="lineColor">Line Color:</label>
+                    <p>How the gesture trail and hints look while you draw.</p>
+                </header>
+                <div class="card">
+                    <h3>Gesture trail</h3>
+                    <div class="setting-row">
+                        <label for="lineColor">Line color</label>
                         <input type="color" id="lineColor" name="lineColor">
                     </div>
-                    <div class="setting-group">
-                        <label for="lineWidth">Line Width:</label>
-                        <input type="range" id="lineWidth" name="lineWidth" min="1" max="10" step="1">
-                        <span id="lineWidthValue">4px</span>
-                    </div>
-                    <div class="setting-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="highContrast" name="highContrast">
-                            High Contrast Mode
-                        </label>
-                        <small>Adds shadow effects for better visibility</small>
-                    </div>
-                    <div class="setting-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="showContextChip" name="showContextChip">
-                            Show Context Indicator
-                        </label>
-                        <small>Display context name during gesture</small>
-                    </div>
-                    <div class="setting-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="showGestureName" name="showGestureName">
-                            Show Gesture Name
-                        </label>
-                        <small>Display gesture name during drawing</small>
-                    </div>
-                </section>
-
-                <!-- Contexts Section -->
-                <section id="contexts-section" class="section">
-                    <h2>Context Settings</h2>
-                    
-                    <div class="context-settings">
-                        <h3>Page Context (Right Mouse Button)</h3>
-                        <div class="setting-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="pageEnabled" name="pageEnabled">
-                                Enable Page Gestures
-                            </label>
+                    <div class="setting-row">
+                        <label for="lineWidth">Line width</label>
+                        <div class="range-control">
+                            <input type="range" id="lineWidth" name="lineWidth" min="1" max="10" step="1">
+                            <output id="lineWidthValue" for="lineWidth">4px</output>
                         </div>
-                        <div class="setting-group">
-                            <label for="pageThreshold">Movement Threshold:</label>
+                    </div>
+                    <div class="setting-row">
+                        <label for="highContrast">
+                            High contrast
+                            <small>Adds a shadow so the trail stays visible on any page</small>
+                        </label>
+                        <input type="checkbox" id="highContrast" name="highContrast">
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Hints</h3>
+                    <div class="setting-row">
+                        <label for="showContextChip">
+                            Show context indicator
+                            <small>Shows whether the gesture is on a page, link or selection</small>
+                        </label>
+                        <input type="checkbox" id="showContextChip" name="showContextChip">
+                    </div>
+                    <div class="setting-row">
+                        <label for="showGestureName">
+                            Show gesture name
+                            <small>Shows the action that will run while you draw</small>
+                        </label>
+                        <input type="checkbox" id="showGestureName" name="showGestureName">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contexts Section -->
+            <section id="contexts-section" class="section">
+                <header class="section-header">
+                    <h2>Contexts</h2>
+                    <p>Where gestures start: anywhere on a page, on a link, or on selected text.</p>
+                </header>
+
+                <div class="card">
+                    <h3>Page <span class="badge">Right mouse button</span></h3>
+                    <div class="setting-row">
+                        <label for="pageEnabled">Enable page gestures</label>
+                        <input type="checkbox" id="pageEnabled" name="pageEnabled">
+                    </div>
+                    <div class="setting-row">
+                        <label for="pageThreshold">
+                            Movement threshold
+                            <small>How far the mouse must move before a gesture starts; lower is more sensitive</small>
+                        </label>
+                        <div class="range-control">
                             <input type="range" id="pageThreshold" name="pageThreshold" min="5" max="50" step="1">
-                            <span id="pageThresholdValue">16px</span>
+                            <output id="pageThresholdValue" for="pageThreshold">16px</output>
                         </div>
                     </div>
+                </div>
 
-                    <div class="context-settings">
-                        <h3>Link Context (Left Mouse Button)</h3>
-                        <div class="setting-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="linkEnabled" name="linkEnabled">
-                                Enable Link Gestures
-                            </label>
-                        </div>
-                        <div class="setting-group">
-                            <label for="linkModifier">Activation Key:</label>
-                            <select id="linkModifier" name="linkModifier">
-                                <option value="none">No modifier required</option>
-                                <option value="alt">Alt + Left Click</option>
-                                <option value="ctrl">Ctrl + Left Click</option>
-                                <option value="shift">Shift + Left Click</option>
-                            </select>
-                        </div>
+                <div class="card">
+                    <h3>Link <span class="badge">Left mouse button</span></h3>
+                    <div class="setting-row">
+                        <label for="linkEnabled">Enable link gestures</label>
+                        <input type="checkbox" id="linkEnabled" name="linkEnabled">
                     </div>
-
-                    <div class="context-settings">
-                        <h3>Selection Context (Left Mouse Button)</h3>
-                        <div class="setting-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="selectionEnabled" name="selectionEnabled">
-                                Enable Selection Gestures
-                            </label>
-                        </div>
-                        <div class="setting-group">
-                            <label for="selectionModifier">Activation Key:</label>
-                            <select id="selectionModifier" name="selectionModifier">
-                                <option value="none">No modifier required</option>
-                                <option value="alt">Alt + Left Click</option>
-                                <option value="ctrl">Ctrl + Left Click</option>
-                                <option value="shift">Shift + Left Click</option>
-                            </select>
-                        </div>
+                    <div class="setting-row">
+                        <label for="linkModifier">
+                            Activation key
+                            <small>Key to hold while dragging a link</small>
+                        </label>
+                        <select id="linkModifier" name="linkModifier">
+                            <option value="none">None</option>
+                            <option value="alt">Alt</option>
+                            <option value="ctrl">Ctrl</option>
+                            <option value="shift">Shift</option>
+                        </select>
                     </div>
-                </section>
+                </div>
 
-                <!-- Search Section -->
-                <section id="search-section" class="section">
+                <div class="card">
+                    <h3>Selection <span class="badge">Left mouse button</span></h3>
+                    <div class="setting-row">
+                        <label for="selectionEnabled">Enable selection gestures</label>
+                        <input type="checkbox" id="selectionEnabled" name="selectionEnabled">
+                    </div>
+                    <div class="setting-row">
+                        <label for="selectionModifier">
+                            Activation key
+                            <small>Key to hold while dragging selected text</small>
+                        </label>
+                        <select id="selectionModifier" name="selectionModifier">
+                            <option value="none">None</option>
+                            <option value="alt">Alt</option>
+                            <option value="ctrl">Ctrl</option>
+                            <option value="shift">Shift</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Section -->
+            <section id="search-section" class="section">
+                <header class="section-header">
                     <h2>Search Engine</h2>
-                    <div class="setting-group">
-                        <label for="searchProvider">Search Provider:</label>
+                    <p>Used by the gestures that search selected text.</p>
+                </header>
+                <div class="card">
+                    <div class="setting-row">
+                        <label for="searchProvider">Search provider</label>
                         <select id="searchProvider" name="searchProvider">
                             <option value="google">Google</option>
                             <option value="bing">Bing</option>
@@ -223,163 +251,183 @@
                             <option value="custom">Custom</option>
                         </select>
                     </div>
-                    <div class="setting-group" id="customUrlGroup">
-                        <label for="customSearchUrl">Custom Search URL:</label>
-                        <input type="url" id="customSearchUrl" name="customSearchUrl" placeholder="https://example.com/search?q=%s">
-                        <small>Use %s where the search term should be inserted</small>
-                    </div>
-                    <div class="setting-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="clickableMapPreview" name="clickableMapPreview">
-                            Clickable Map on Google Search
+                    <div class="setting-row" id="customUrlGroup">
+                        <label for="customSearchUrl">
+                            Custom search URL
+                            <small>Put %s where the search term goes</small>
                         </label>
-                        <small>Clicking the map preview in Google results opens Google Maps in a new tab</small>
+                        <input type="url" id="customSearchUrl" name="customSearchUrl" placeholder="https://example.com/search?q=%s">
                     </div>
-                </section>
+                </div>
+                <div class="card">
+                    <h3>Google Search</h3>
+                    <div class="setting-row">
+                        <label for="clickableMapPreview">
+                            Clickable map
+                            <small>Clicking the map preview in Google results opens Google Maps in a new tab</small>
+                        </label>
+                        <input type="checkbox" id="clickableMapPreview" name="clickableMapPreview">
+                    </div>
+                </div>
+            </section>
 
-                <!-- Tab Order Section -->
-                <section id="taborder-section" class="section">
+            <!-- Tab Order Section -->
+            <section id="taborder-section" class="section">
+                <header class="section-header">
                     <h2>Tab Order</h2>
+                    <p>Where new tabs appear and which tab becomes active after one is closed.</p>
+                </header>
 
-                    <div class="context-settings">
-                        <h3>On tab open</h3>
+                <div class="card">
+                    <h3>When a tab opens</h3>
+                    <fieldset class="radio-group">
+                        <legend>Position</legend>
+                        <label class="radio-label">
+                            <input type="radio" name="tabOpenPosition" value="default">
+                            Browser default
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="tabOpenPosition" value="right">
+                            Right of the current tab
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="tabOpenPosition" value="left">
+                            Left of the current tab
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="tabOpenPosition" value="far_right">
+                            At the far right, after all tabs
+                        </label>
+                    </fieldset>
 
-                        <div class="setting-group">
-                            <label class="radio-group-label">Position:</label>
-                            <div class="radio-group">
-                                <label class="radio-label">
-                                    <input type="radio" name="tabOpenPosition" value="default">
-                                    follow default behaviour
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="tabOpenPosition" value="right">
-                                    position right of current tab
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="tabOpenPosition" value="left">
-                                    position left of current tab
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="tabOpenPosition" value="far_right">
-                                    position far right end of all tabs
-                                </label>
-                            </div>
-                        </div>
+                    <fieldset class="radio-group">
+                        <legend>State</legend>
+                        <label class="radio-label">
+                            <input type="radio" name="tabOpenState" value="default">
+                            Browser default
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="tabOpenState" value="foreground">
+                            Open in the foreground
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="tabOpenState" value="background">
+                            Open in the background
+                        </label>
+                    </fieldset>
+                </div>
 
-                        <div class="setting-group">
-                            <label class="radio-group-label">State:</label>
-                            <div class="radio-group">
-                                <label class="radio-label">
-                                    <input type="radio" name="tabOpenState" value="default">
-                                    follow default behaviour
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="tabOpenState" value="foreground">
-                                    open in foreground
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="tabOpenState" value="background">
-                                    open in background
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+                <div class="card">
+                    <h3>After a tab closes</h3>
+                    <fieldset class="radio-group">
+                        <legend>Go to</legend>
+                        <label class="radio-label">
+                            <input type="radio" name="tabClosePosition" value="default">
+                            Browser default
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="tabClosePosition" value="left">
+                            The tab on the left
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="tabClosePosition" value="right">
+                            The tab on the right
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="tabClosePosition" value="last_active">
+                            The last active tab
+                        </label>
+                    </fieldset>
+                </div>
+            </section>
 
-                    <div class="context-settings">
-                        <h3>After tab close</h3>
-
-                        <div class="setting-group">
-                            <label class="radio-group-label">Position:</label>
-                            <div class="radio-group">
-                                <label class="radio-label">
-                                    <input type="radio" name="tabClosePosition" value="default">
-                                    follow default behaviour
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="tabClosePosition" value="left">
-                                    go to left tab
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="tabClosePosition" value="right">
-                                    go to right tab
-                                </label>
-                                <label class="radio-label">
-                                    <input type="radio" name="tabClosePosition" value="last_active">
-                                    go to last active tab
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Exclusions Section -->
-                <section id="exclusions-section" class="section">
+            <!-- Exclusions Section -->
+            <section id="exclusions-section" class="section">
+                <header class="section-header">
                     <h2>Site Exclusions</h2>
-                    <p>Disable QuickGestures on specific websites using wildcard patterns.</p>
-                    
-                    <div class="setting-group">
-                        <label for="exclusionPattern">Add Exclusion Pattern:</label>
-                        <div style="display: flex; gap: 8px; align-items: center;">
-                            <input type="text" id="exclusionPattern" placeholder="*.example.com/*" style="flex: 1;">
-                            <button id="addExclusion" class="btn btn-primary">Add</button>
-                        </div>
-                        <small>Use * for wildcard matching. Examples: *.test.com/*, https://example.com/admin/*</small>
+                    <p>Turn gestures off on specific websites.</p>
+                </header>
+                <div class="card">
+                    <label for="exclusionPattern" class="field-label">Add a pattern</label>
+                    <div class="inline-form">
+                        <input type="text" id="exclusionPattern" placeholder="*.example.com/*" aria-describedby="exclusionHint exclusionError">
+                        <button type="button" id="addExclusion" class="btn btn-primary">Add</button>
                     </div>
-                    
-                    <div class="exclusions-list">
-                        <h3>Active Exclusions</h3>
-                        <ul id="exclusionsList" class="exclusions-list-items">
-                            <!-- Exclusions will be populated by JavaScript -->
-                        </ul>
-                    </div>
-                </section>
+                    <p class="field-error" id="exclusionError" hidden></p>
+                    <small id="exclusionHint" class="hint">Use * for any text. Examples: <code>*.example.com/*</code>, <code>https://example.com/admin/*</code></small>
+                </div>
+                <div class="card">
+                    <h3>Active exclusions</h3>
+                    <ul id="exclusionsList" class="exclusions-list-items">
+                        <!-- Exclusions will be populated by JavaScript -->
+                    </ul>
+                </div>
+            </section>
 
-                <!-- Utilities Section -->
-                <section id="utilities-section" class="section">
+            <!-- Utilities Section -->
+            <section id="utilities-section" class="section">
+                <header class="section-header">
                     <h2>Utilities</h2>
-                    <div class="utility-buttons">
-                        <button id="reset-settings" class="btn btn-warning">Reset to Defaults</button>
-                        <button id="export-settings" class="btn btn-secondary">Export Settings</button>
-                        <button id="import-settings" class="btn btn-secondary">Import Settings</button>
+                    <p>Back up your settings, move them to another browser, or start over.</p>
+                </header>
+                <div class="card">
+                    <h3>Backup</h3>
+                    <div class="button-row">
+                        <button type="button" id="export-settings" class="btn btn-secondary">Export settings</button>
+                        <button type="button" id="import-settings" class="btn btn-secondary">Import settings</button>
                     </div>
-                    <input type="file" id="import-file" accept=".json" style="display: none;">
-                    
-                    <div class="info-section">
-                        <h3>About</h3>
-                        <p>QuickGestures v1.0.0</p>
-                        <p>Gesture-based browser automation for Chrome</p>
-                        <p><a href="#" id="help-link">Help & Documentation</a></p>
+                    <input type="file" id="import-file" accept=".json" hidden>
+                </div>
+                <div class="card card-danger">
+                    <h3>Reset</h3>
+                    <p class="card-text">Restores every setting, including your gesture mappings and exclusions, to the defaults.</p>
+                    <div class="button-row">
+                        <button type="button" id="reset-settings" class="btn btn-danger">Reset to defaults</button>
                     </div>
-                </section>
-            </main>
-        </div>
+                </div>
+                <div class="card">
+                    <h3>About</h3>
+                    <p class="card-text">QuickGestures <span id="version"></span></p>
+                    <p class="card-text">Mouse gestures for Chrome</p>
+                    <p class="card-text"><a href="https://deneblab.github.io/QuickGestures/" id="help-link" target="_blank" rel="noopener">Help &amp; documentation</a></p>
+                </div>
+            </section>
+        </main>
     </div>
 
-    <div id="add-mapping-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Mapping</h3>
-                <button class="close-btn">&times;</button>
+    <dialog id="add-mapping-modal" class="dialog" aria-labelledby="add-mapping-title">
+        <form method="dialog" id="add-mapping-form">
+            <h3 id="add-mapping-title">Add mapping</h3>
+            <div class="field">
+                <label for="new-gesture" class="field-label">Gesture</label>
+                <input type="text" id="new-gesture" placeholder="e.g. LR, UD, LURD" autocomplete="off" aria-describedby="new-gesture-hint new-gesture-error">
+                <small id="new-gesture-hint" class="hint">L, R, U and D for left, right, up and down</small>
             </div>
-            <div class="modal-body">
-                <div class="setting-group">
-                    <label for="new-gesture">Gesture:</label>
-                    <input type="text" id="new-gesture" placeholder="e.g., LR, UD, LURD">
-                    <small>Use L/R/U/D for Left/Right/Up/Down</small>
-                </div>
-                <div class="setting-group">
-                    <label for="new-action">Action:</label>
-                    <select id="new-action">
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
-                </div>
+            <div class="field">
+                <label for="new-action" class="field-label">Action</label>
+                <select id="new-action">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
             </div>
-            <div class="modal-footer">
-                <button id="cancel-mapping" class="btn btn-secondary">Cancel</button>
-                <button id="save-mapping" class="btn btn-primary">Save</button>
+            <p class="field-error" id="new-gesture-error" hidden></p>
+            <div class="dialog-actions">
+                <button type="button" id="cancel-mapping" class="btn btn-secondary">Cancel</button>
+                <button type="submit" id="save-mapping" class="btn btn-primary">Save</button>
             </div>
-        </div>
-    </div>
+        </form>
+    </dialog>
+
+    <dialog id="confirm-dialog" class="dialog" aria-labelledby="confirm-message">
+        <form method="dialog">
+            <p id="confirm-message"></p>
+            <div class="dialog-actions">
+                <button type="submit" value="cancel" class="btn btn-secondary">Cancel</button>
+                <button type="submit" value="confirm" id="confirm-ok" class="btn btn-danger">Confirm</button>
+            </div>
+        </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script type="module" src="options.js"></script>
 </body>

@@ -4,8 +4,9 @@ import { sendMessage } from '../shared/messaging';
 import { convertGestureToArrows } from '../shared/utils';
 
 class OptionsPage {
-  private settings: ExtensionSettings = DEFAULT_SETTINGS;
+  private settings: ExtensionSettings = structuredClone(DEFAULT_SETTINGS);
   private currentContext: GestureContext = 'page';
+  private toastTimer: ReturnType<typeof setTimeout> | undefined;
   
   constructor() {
     this.initialize();
@@ -34,13 +35,47 @@ class OptionsPage {
   
   private async saveSettings(): Promise<void> {
     try {
-      await sendMessage({
+      const response = await sendMessage({
         type: 'settings_update',
         payload: { settings: this.settings }
       });
+      
+      if (!response?.success) {
+        throw new Error(response?.error ?? 'No response');
+      }
+      this.showToast('Settings saved');
     } catch (error) {
       console.error('Failed to save settings:', error);
+      this.showToast('Could not save settings', true);
     }
+  }
+  
+  private showToast(message: string, isError = false): void {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    
+    toast.textContent = message;
+    toast.classList.toggle('error', isError);
+    toast.classList.add('visible');
+    
+    clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => toast.classList.remove('visible'), isError ? 4000 : 1500);
+  }
+  
+  // A page dialog instead of confirm(), which blocks the page and cannot be styled
+  private confirmAction(message: string, confirmLabel: string): Promise<boolean> {
+    const dialog = document.getElementById('confirm-dialog') as HTMLDialogElement;
+    const messageElement = document.getElementById('confirm-message') as HTMLParagraphElement;
+    const confirmButton = document.getElementById('confirm-ok') as HTMLButtonElement;
+    
+    messageElement.textContent = message;
+    confirmButton.textContent = confirmLabel;
+    dialog.returnValue = '';
+    dialog.showModal();
+    
+    return new Promise(resolve => {
+      dialog.addEventListener('close', () => resolve(dialog.returnValue === 'confirm'), { once: true });
+    });
   }
   
   private setupEventListeners(): void {
@@ -210,8 +245,8 @@ class OptionsPage {
   private setupUtilityHandlers(): void {
     const resetBtn = document.getElementById('reset-settings');
     resetBtn?.addEventListener('click', async () => {
-      if (confirm('Are you sure you want to reset all settings to defaults?')) {
-        this.settings = { ...DEFAULT_SETTINGS };
+      if (await this.confirmAction('Reset all settings, including your gesture mappings and exclusions, to the defaults?', 'Reset')) {
+        this.settings = structuredClone(DEFAULT_SETTINGS);
         await this.saveSettings();
         this.renderUI();
       }
@@ -230,36 +265,58 @@ class OptionsPage {
     });
     
     importFile.addEventListener('change', (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
+      const input = e.target as HTMLInputElement;
+      const file = input.files?.[0];
       if (file) {
         this.importSettings(file);
       }
+      // Lets the same file be picked again
+      input.value = '';
     });
   }
   
   private setupModalHandlers(): void {
-    const modal = document.getElementById('add-mapping-modal');
-    const closeBtn = modal?.querySelector('.close-btn');
+    const modal = document.getElementById('add-mapping-modal') as HTMLDialogElement;
+    const form = document.getElementById('add-mapping-form') as HTMLFormElement;
     const cancelBtn = document.getElementById('cancel-mapping');
-    const saveBtn = document.getElementById('save-mapping');
-    
-    closeBtn?.addEventListener('click', () => {
-      this.hideAddMappingModal();
-    });
+    const gestureInput = document.getElementById('new-gesture') as HTMLInputElement;
     
     cancelBtn?.addEventListener('click', () => {
       this.hideAddMappingModal();
     });
     
-    saveBtn?.addEventListener('click', () => {
+    // Save button and Enter both submit the form; the dialog stays open while the input is invalid
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
       this.saveNewMapping();
     });
     
-    modal?.addEventListener('click', (e) => {
+    gestureInput.addEventListener('input', () => {
+      this.setFieldError(gestureInput, 'new-gesture-error', '');
+    });
+    
+    modal.addEventListener('close', () => {
+      this.resetAddMappingForm();
+    });
+    
+    // A click on the backdrop lands on the dialog element itself
+    modal.addEventListener('click', (e) => {
       if (e.target === modal) {
         this.hideAddMappingModal();
       }
     });
+  }
+  
+  private setFieldError(input: HTMLInputElement, errorId: string, message: string): void {
+    const error = document.getElementById(errorId);
+    if (!error) return;
+    
+    error.textContent = message;
+    error.hidden = message === '';
+    input.setAttribute('aria-invalid', String(message !== ''));
+    if (message) {
+      input.focus();
+    }
   }
   
   private renderUI(): void {
@@ -271,6 +328,14 @@ class OptionsPage {
     this.renderExclusions();
     this.renderMappings();
     this.populateActionOptions();
+    this.renderVersion();
+  }
+  
+  private renderVersion(): void {
+    const version = document.getElementById('version');
+    if (version) {
+      version.textContent = `v${chrome.runtime.getManifest().version}`;
+    }
   }
   
   private renderGlobalSettings(): void {
@@ -348,40 +413,48 @@ class OptionsPage {
     if (!container) return;
     
     const mappings = this.settings.mappings[this.currentContext];
+    container.replaceChildren();
+    
+    if (mappings.length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'empty-state';
+      empty.textContent = 'No gestures in this context yet.';
+      container.appendChild(empty);
+      return;
+    }
     
     const table = document.createElement('table');
     table.className = 'mappings-table';
     
-    table.innerHTML = `
-      <thead>
-        <tr>
-          <th>Gesture</th>
-          <th>Action</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${mappings.map((mapping, index) => `
-          <tr>
-            <td class="gesture-cell">${convertGestureToArrows(mapping.gesture)}</td>
-            <td>${ACTION_LABELS[mapping.action]}</td>
-            <td>
-              <button class="delete-btn" data-index="${index}">Delete</button>
-            </td>
-          </tr>
-        `).join('')}
-      </tbody>
-    `;
-    
-    container.innerHTML = '';
-    container.appendChild(table);
-    
-    table.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const index = parseInt((e.target as HTMLElement).dataset.index!);
-        this.deleteMapping(index);
-      });
+    const headerRow = table.createTHead().insertRow();
+    ['Gesture', 'Action', ''].forEach(text => {
+      const th = document.createElement('th');
+      th.scope = 'col';
+      th.textContent = text;
+      headerRow.appendChild(th);
     });
+    
+    const body = table.createTBody();
+    mappings.forEach((mapping, index) => {
+      const row = body.insertRow();
+      
+      const gestureCell = row.insertCell();
+      gestureCell.className = 'gesture-cell';
+      gestureCell.textContent = convertGestureToArrows(mapping.gesture);
+      gestureCell.title = mapping.gesture;
+      
+      row.insertCell().textContent = ACTION_LABELS[mapping.action] ?? mapping.action;
+      
+      const deleteButton = document.createElement('button');
+      deleteButton.type = 'button';
+      deleteButton.className = 'btn-ghost-danger';
+      deleteButton.textContent = 'Delete';
+      deleteButton.setAttribute('aria-label', `Delete ${ACTION_LABELS[mapping.action] ?? mapping.action} gesture`);
+      deleteButton.addEventListener('click', () => this.deleteMapping(index));
+      row.insertCell().appendChild(deleteButton);
+    });
+    
+    container.appendChild(table);
   }
   
   private populateActionOptions(): void {
@@ -399,24 +472,30 @@ class OptionsPage {
   }
   
   private switchSection(section: string): void {
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.classList.remove('active');
+    document.querySelectorAll<HTMLElement>('.nav-item').forEach(item => {
+      const isActive = item.dataset.section === section;
+      item.classList.toggle('active', isActive);
+      if (isActive) {
+        item.setAttribute('aria-current', 'page');
+        // On narrow screens the menu is a horizontal strip that may have the item out of view
+        item.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      } else {
+        item.removeAttribute('aria-current');
+      }
     });
     document.querySelectorAll('.section').forEach(sec => {
-      sec.classList.remove('active');
+      sec.classList.toggle('active', sec.id === `${section}-section`);
     });
-    
-    document.querySelector(`[data-section="${section}"]`)?.classList.add('active');
-    document.getElementById(`${section}-section`)?.classList.add('active');
   }
   
   private switchContext(context: GestureContext): void {
     this.currentContext = context;
     
-    document.querySelectorAll('.context-tab').forEach(tab => {
-      tab.classList.remove('active');
+    document.querySelectorAll<HTMLElement>('.context-tab').forEach(tab => {
+      const isActive = tab.dataset.context === context;
+      tab.classList.toggle('active', isActive);
+      tab.setAttribute('aria-selected', String(isActive));
     });
-    document.querySelector(`[data-context="${context}"]`)?.classList.add('active');
     
     this.renderMappings();
   }
@@ -433,18 +512,21 @@ class OptionsPage {
   }
   
   private showAddMappingModal(): void {
-    const modal = document.getElementById('add-mapping-modal');
-    modal!.style.display = 'block';
+    const modal = document.getElementById('add-mapping-modal') as HTMLDialogElement;
+    modal.showModal();
   }
   
   private hideAddMappingModal(): void {
-    const modal = document.getElementById('add-mapping-modal');
-    modal!.style.display = 'none';
-    
+    const modal = document.getElementById('add-mapping-modal') as HTMLDialogElement;
+    modal.close();
+  }
+  
+  private resetAddMappingForm(): void {
     const gestureInput = document.getElementById('new-gesture') as HTMLInputElement;
     const actionSelect = document.getElementById('new-action') as HTMLSelectElement;
     gestureInput.value = '';
     actionSelect.selectedIndex = 0;
+    this.setFieldError(gestureInput, 'new-gesture-error', '');
   }
   
   private async saveNewMapping(): Promise<void> {
@@ -455,17 +537,19 @@ class OptionsPage {
     const action = actionSelect.value as ActionType;
     
     if (!gesture || !action) {
-      alert('Please enter a gesture and select an action.');
+      this.setFieldError(gestureInput, 'new-gesture-error', 'Enter a gesture.');
       return;
     }
     
     if (!/^[LRUD]+$/.test(gesture)) {
-      alert('Gesture must only contain L, R, U, D characters.');
+      this.setFieldError(gestureInput, 'new-gesture-error', 'Use only the letters L, R, U and D.');
       return;
     }
     
-    if (this.settings.mappings[this.currentContext].some(m => m.gesture === gesture)) {
-      alert('This gesture is already mapped. Please delete the existing mapping first.');
+    const existing = this.settings.mappings[this.currentContext].find(m => m.gesture === gesture);
+    if (existing) {
+      this.setFieldError(gestureInput, 'new-gesture-error',
+        `This gesture already runs "${ACTION_LABELS[existing.action]}". Delete that mapping first.`);
       return;
     }
     
@@ -478,7 +562,10 @@ class OptionsPage {
   }
   
   private async deleteMapping(index: number): Promise<void> {
-    if (confirm('Are you sure you want to delete this mapping?')) {
+    const mapping = this.settings.mappings[this.currentContext][index];
+    const label = `${convertGestureToArrows(mapping.gesture)} ${ACTION_LABELS[mapping.action] ?? mapping.action}`;
+    
+    if (await this.confirmAction(`Delete the gesture ${label}?`, 'Delete')) {
       this.settings.mappings[this.currentContext].splice(index, 1);
       await this.saveSettings();
       this.renderMappings();
@@ -505,12 +592,12 @@ class OptionsPage {
         this.settings = { ...imported, googleMaps: imported.googleMaps ?? DEFAULT_GOOGLE_MAPS };
         await this.saveSettings();
         this.renderUI();
-        alert('Settings imported successfully!');
+        this.showToast('Settings imported');
       } else {
-        alert('Invalid settings file format.');
+        this.showToast('This file is not a QuickGestures settings file', true);
       }
     } catch (error) {
-      alert('Failed to import settings. Please check the file format.');
+      this.showToast('Could not read the settings file', true);
     }
   }
   
@@ -531,10 +618,14 @@ class OptionsPage {
       this.addExclusion();
     });
     
-    input?.addEventListener('keypress', (e) => {
+    input?.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         this.addExclusion();
       }
+    });
+    
+    input?.addEventListener('input', () => {
+      this.setFieldError(input, 'exclusionError', '');
     });
   }
   
@@ -542,24 +633,25 @@ class OptionsPage {
     const list = document.getElementById('exclusionsList');
     if (!list) return;
     
-    list.innerHTML = '';
+    list.replaceChildren();
     
     this.settings.exclusions.forEach((pattern, index) => {
       const item = document.createElement('li');
       item.className = 'exclusion-item';
-      item.innerHTML = `
-        <span class="exclusion-pattern">${pattern}</span>
-        <button class="exclusion-remove" data-index="${index}">Remove</button>
-      `;
+      
+      const patternElement = document.createElement('span');
+      patternElement.className = 'exclusion-pattern';
+      patternElement.textContent = pattern;
+      
+      const removeButton = document.createElement('button');
+      removeButton.type = 'button';
+      removeButton.className = 'btn-ghost-danger';
+      removeButton.textContent = 'Remove';
+      removeButton.setAttribute('aria-label', `Remove ${pattern}`);
+      removeButton.addEventListener('click', () => this.removeExclusion(index));
+      
+      item.append(patternElement, removeButton);
       list.appendChild(item);
-    });
-    
-    // Add event listeners to remove buttons
-    list.querySelectorAll('.exclusion-remove').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const index = parseInt((e.target as HTMLElement).dataset.index!);
-        this.removeExclusion(index);
-      });
     });
   }
   
@@ -568,12 +660,12 @@ class OptionsPage {
     const pattern = input.value.trim();
     
     if (!pattern) {
-      alert('Please enter an exclusion pattern.');
+      this.setFieldError(input, 'exclusionError', 'Enter a pattern.');
       return;
     }
     
     if (this.settings.exclusions.includes(pattern)) {
-      alert('This exclusion pattern already exists.');
+      this.setFieldError(input, 'exclusionError', 'This pattern is already in the list.');
       return;
     }
     
@@ -585,7 +677,7 @@ class OptionsPage {
   }
   
   private async removeExclusion(index: number): Promise<void> {
-    if (confirm('Are you sure you want to remove this exclusion?')) {
+    if (await this.confirmAction(`Remove the exclusion ${this.settings.exclusions[index]}?`, 'Remove')) {
       this.settings.exclusions.splice(index, 1);
       await this.saveSettings();
       this.renderExclusions();

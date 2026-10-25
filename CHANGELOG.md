@@ -17,6 +17,10 @@ All notable user-facing changes to QuickGestures are documented here.
 
 ### Changed
 - Removed the unused `activeTab` permission; the extension now requests fewer permissions
+- Redesigned the options page: a lighter, more readable layout with larger text, settings grouped in cards with short explanations, and clear primary and destructive buttons
+- The options page confirms each saved change, reports when saving fails, and shows input errors next to the field instead of in pop-ups
+- The options page shows the real extension version, and its "Help & documentation" link opens the documentation site
+- The options page can be used with the keyboard
 
 ## [0.3.7]
 
