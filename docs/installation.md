@@ -1,103 +1,69 @@
-# 🚀 Installation Guide
+---
+title: Installation
+description: Install QuickGestures from the Chrome Web Store or build it from source.
+---
 
-## Method 1: Chrome Web Store (Recommended)
-*Coming soon - extension will be published to Chrome Web Store*
+# Installation
 
-## Method 2: Developer Installation
+{% if site.chrome_web_store_url != "" %}
+## From the Chrome Web Store
 
-### Prerequisites
-- Google Chrome browser
-- Node.js 24+ (latest LTS) (for building from source)
-- Basic command line knowledge
+The easiest way: open [QuickGestures in the Chrome Web Store]({{ site.chrome_web_store_url }}) and click **Add to Chrome**. Chrome keeps the extension up to date for you.
+{% else %}
+## From the Chrome Web Store
 
-### Step 1: Get the Code
+QuickGestures is available in the Chrome Web Store. Search for **QuickGestures** there and click **Add to Chrome**. Chrome keeps the extension up to date for you.
+{% endif %}
+
+After installing, the options page opens so you can look at the gestures. Then try one on any web page: hold the right mouse button, move the mouse to the left and let go to go back.
+
+> On macOS and Linux the right-click menu opens as soon as the button is pressed, so QuickGestures holds it back while you draw. Right-click twice in quick succession to open the menu.
+
+## From a release package
+
+Every version is also published on the [Releases page]({{ site.repository_url }}/releases) as a zip file.
+
+1. Download `quickgestures-v<version>.zip` from the latest release and unzip it into a folder you will keep.
+2. Open `chrome://extensions/` in Chrome.
+3. Turn on **Developer mode** in the top-right corner.
+4. Click **Load unpacked** and select the unzipped folder.
+
+Extensions loaded this way are not updated automatically: repeat the steps with a newer release to update.
+
+## From source
+
+You need Google Chrome and [Node.js](https://nodejs.org/) 24 or newer.
+
 ```bash
-# Clone the repository
 git clone https://github.com/deneblab/QuickGestures.git
 cd QuickGestures
-```
-
-### Step 2: Build the Extension
-```bash
-# Install dependencies
 npm install
-
-# Build for production
 npm run build
 ```
 
-This creates a `dist` folder with the compiled extension.
+This creates the `dist` folder. Load it in Chrome with **Load unpacked**, as described above.
 
-To also create the release zip (`output/quickgestures-v<version>.zip`), run the full build instead: `.\build.cmd` on Windows or `./build.sh` on Linux/macOS. It needs the .NET 10 SDK and installs a local copy if it is missing.
+To also create the release zip (`output/quickgestures-v<version>.zip`), run the full build instead: `.\build.cmd` on Windows or `./build.sh` on Linux and macOS. It needs the .NET 10 SDK and installs a local copy if it is missing.
 
-### Step 3: Load in Chrome
-1. Open Chrome and navigate to `chrome://extensions/`
-2. Enable **"Developer mode"** (toggle in top-right corner)
-3. Click **"Load unpacked"** 
-4. Select the `dist` folder from your QuickGestures directory
-5. The extension icon should appear in your toolbar
-
-### Step 4: Verify Installation
-1. Right-click on any webpage
-2. Try drawing a simple gesture (like ⬅ for "Go Back")
-3. You should see a blue trail following your mouse
-4. The gesture should trigger the corresponding action
+While you work on the code, `npm run dev` rebuilds on every change; reload the extension on `chrome://extensions/` to pick up the new build.
 
 ## Troubleshooting
 
-### Extension Not Loading
-- **Check Developer Mode**: Make sure it's enabled in `chrome://extensions/`
-- **Build Issues**: Run `npm run clean && npm run build` to rebuild
-- **Node Version**: Ensure Node.js 24+ (latest LTS) is installed
+### Gestures do nothing
 
-### Gestures Not Working
-- **Check Extension Status**: Ensure it's enabled in `chrome://extensions/`
-- **Site Exclusions**: Check if the current site is excluded in options
-- **Console Errors**: Check browser console (F12) for error messages
+- Check that QuickGestures is turned on in `chrome://extensions/` and that **Extension enabled** is on at the top of its options page.
+- Gestures do not work on Chrome's own pages, such as the new tab page, `chrome://` pages and the Chrome Web Store. Try a regular website.
+- Check that the site is not listed under **Exclusions** on the options page.
+- Pages that were open before you installed or updated the extension need a reload.
 
-### Performance Issues
-- **Disable on Heavy Sites**: Add problematic sites to exclusions
-- **Adjust Sensitivity**: Lower recognition thresholds in options
-- **Clear Cache**: Reload the extension or restart Chrome
+### Gestures start too easily, or not at all
 
-## Updating the Extension
+Change **Movement threshold** under **Contexts** on the options page: a higher value needs a longer movement before a gesture starts.
 
-### From Source
-```bash
-# Pull latest changes
-git pull origin main
+### Dragging links or text no longer works as before
 
-# Rebuild
-npm run build
-
-# Reload extension in Chrome
-# Go to chrome://extensions/ and click the refresh icon
-```
-
-### Automatic Updates
-Once published to Chrome Web Store, updates will be automatic.
+Link and selection gestures use the left mouse button. Under **Contexts**, choose an activation key (Alt, Ctrl or Shift) so they start only while that key is held, or turn them off.
 
 ## Uninstalling
 
-1. Go to `chrome://extensions/`
-2. Find "QuickGestures" 
-3. Click **"Remove"**
-4. Confirm removal
-
-All settings and data will be removed from Chrome storage.
-
-## Development Installation
-
-For developers who want to modify the extension:
-
-```bash
-# Install dependencies
-npm install
-
-# Start development mode (auto-rebuild on changes)
-npm run dev
-
-# In Chrome, reload the extension after changes
-```
-
-The `npm run dev` command watches for file changes and rebuilds automatically, but you'll still need to refresh the extension in Chrome to see changes.
+Open `chrome://extensions/`, find QuickGestures and click **Remove**. Its settings are removed from Chrome together with it.

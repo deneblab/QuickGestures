@@ -8,6 +8,10 @@ A powerful Chrome extension that brings fluid mouse gesture navigation to your b
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)]()
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-green?style=for-the-badge)]()
 
+**Website:** [deneblab.github.io/QuickGestures](https://deneblab.github.io/QuickGestures/) · [Installation guide](https://deneblab.github.io/QuickGestures/installation) · [Privacy policy](https://deneblab.github.io/QuickGestures/privacy-policy)
+
+[![QuickGestures: a gesture drawn down and then right closes the tab](docs/assets/screenshots/01-page-gesture.png)](https://deneblab.github.io/QuickGestures/)
+
 ---
 
 ## ✨ Key Features
@@ -42,6 +46,8 @@ A powerful Chrome extension that brings fluid mouse gesture navigation to your b
 ---
 
 ## 🚀 Quick Start
+
+Install QuickGestures from the Chrome Web Store, or see the [installation guide](https://deneblab.github.io/QuickGestures/installation) for all options. To build it yourself:
 
 ### Installation
 1. **Clone the repository**
@@ -198,6 +204,8 @@ QuickGestures is designed with privacy in mind:
 - ✅ **No External Requests** - No communication with external servers
 - ✅ **Open Source** - Full code transparency
 - ✅ **Minimal Permissions** - Only essential Chrome APIs used
+
+Read the full [privacy policy](https://deneblab.github.io/QuickGestures/privacy-policy).
 
 ### Required Permissions
 - `storage` - Save your gesture settings and preferences (Chrome may sync them across your devices if Chrome Sync is on)

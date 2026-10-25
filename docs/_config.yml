@@ -1,4 +1,19 @@
 # GitHub Pages (Jekyll) settings for https://deneblab.github.io/QuickGestures/
+title: QuickGestures
+description: Mouse gesture navigation for Chrome. Go back, close and reopen tabs, open links and search selected text with a flick of the mouse.
+baseurl: /QuickGestures
+url: https://deneblab.github.io
+repository_url: https://github.com/deneblab/QuickGestures
+
+# Chrome Web Store page of the extension; while empty, "Add to Chrome" buttons lead to the installation guide
+chrome_web_store_url: ""
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+
 # store/ holds Chrome Web Store listing material, not pages of the site
 exclude:
   - store

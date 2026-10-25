@@ -1,3 +1,7 @@
+---
+title: Privacy Policy
+description: QuickGestures does not collect, store or transmit any personal data.
+---
 # Privacy Policy - QuickGestures Chrome Extension
 
 ## Overview

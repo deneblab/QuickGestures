@@ -1,0 +1,218 @@
+---
+title: QuickGestures
+body_class: home
+---
+{% if site.chrome_web_store_url != "" %}{% assign install_url = site.chrome_web_store_url %}{% else %}{% assign install_url = '/installation' | relative_url %}{% endif %}
+
+<section class="hero">
+    <div class="wrap hero-inner">
+        <div>
+            <h1>Browse with a flick of the <span>mouse</span></h1>
+            <p class="lead">QuickGestures turns the things you do all day in Chrome into short mouse gestures. Go back, close and reopen tabs, open links in the background and search selected text, without reaching for the toolbar or the keyboard.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="{{ install_url }}">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 16h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Add to Chrome
+                </a>
+                <a class="btn btn-secondary" href="{{ site.repository_url }}">View on GitHub</a>
+            </div>
+            <p class="hero-note">Free and open source. No tracking, no data collection.</p>
+        </div>
+
+        <div class="demo" role="img" aria-label="A gesture drawn down and then right closes the tab">
+            <div class="demo-bar" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
+            <svg viewBox="0 0 560 330" aria-hidden="true">
+                <g class="demo-text">
+                    <rect x="48" y="40" width="300" height="22" rx="6"/>
+                    <rect x="48" y="86" width="464" height="12" rx="6"/>
+                    <rect x="48" y="110" width="430" height="12" rx="6"/>
+                    <rect x="48" y="134" width="452" height="12" rx="6"/>
+                    <rect x="48" y="170" width="464" height="12" rx="6"/>
+                    <rect x="48" y="194" width="380" height="12" rx="6"/>
+                    <rect x="48" y="230" width="440" height="12" rx="6"/>
+                    <rect x="48" y="254" width="300" height="12" rx="6"/>
+                </g>
+                <path class="demo-trail" d="M190 96 L190 236 L400 236"/>
+                <g class="demo-label">
+                    <rect x="220" y="140" width="130" height="40" rx="8"/>
+                    <text x="285" y="166" text-anchor="middle">Close Tab</text>
+                </g>
+            </svg>
+        </div>
+    </div>
+</section>
+
+<section class="section wrap" id="how-it-works">
+    <div class="section-head">
+        <h2>How it works</h2>
+        <p>Hold a mouse button, draw a short line or two, let go. A trail follows the cursor, so you always see the gesture you are drawing.</p>
+    </div>
+    <div class="grid-3" id="gestures">
+        <div class="card">
+            <span class="card-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M6 8h8M6 11h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            <span class="badge">Right mouse button</span>
+            <h3>On any page</h3>
+            <p>Navigate and manage tabs from anywhere on the page.</p>
+            <ul class="gesture-list">
+                <li><span class="arrows" aria-label="Left">←</span> Go back</li>
+                <li><span class="arrows" aria-label="Right">→</span> Go forward</li>
+                <li><span class="arrows" aria-label="Up">↑</span> Scroll to top</li>
+                <li><span class="arrows" aria-label="Down">↓</span> Scroll to bottom</li>
+                <li><span class="arrows" aria-label="Left, right">←→</span> New tab</li>
+                <li><span class="arrows" aria-label="Down, right">↓→</span> Close tab</li>
+                <li><span class="arrows" aria-label="Down, up">↓↑</span> Reopen closed tab</li>
+                <li><span class="arrows" aria-label="Right, left">→←</span> Close tabs to the right</li>
+                <li><span class="arrows" aria-label="Up, left">↑←</span> Switch to the tab on the left</li>
+                <li><span class="arrows" aria-label="Up, right">↑→</span> Switch to the tab on the right</li>
+            </ul>
+        </div>
+        <div class="card">
+            <span class="card-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 20 20" fill="none"><path d="M8.5 11.5a3.5 3.5 0 0 0 5 0l2.5-2.5a3.5 3.5 0 0 0-5-5l-1 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M11.5 8.5a3.5 3.5 0 0 0-5 0L4 11a3.5 3.5 0 0 0 5 5l1-1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            <span class="badge">Left mouse button</span>
+            <h3>On a link</h3>
+            <p>Drag a link to decide where it opens, without losing your place.</p>
+            <ul class="gesture-list">
+                <li><span class="arrows" aria-label="Right">→</span> Open in a background tab</li>
+                <li><span class="arrows" aria-label="Left">←</span> Open in a foreground tab</li>
+                <li><span class="arrows" aria-label="Up">↑</span> Open in a new window</li>
+            </ul>
+        </div>
+        <div class="card">
+            <span class="card-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="4.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 12l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            <span class="badge">Left mouse button</span>
+            <h3>On selected text</h3>
+            <p>Select a word or sentence and drag it to look it up.</p>
+            <ul class="gesture-list">
+                <li><span class="arrows" aria-label="Right">→</span> Search in a new tab</li>
+                <li><span class="arrows" aria-label="Left">←</span> Search in the current tab</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="section wrap" id="features">
+    <div class="section-head">
+        <h2>Made to fit the way you browse</h2>
+        <p>The defaults work out of the box. Everything else is yours to change.</p>
+    </div>
+    <ul class="features">
+        <li>
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><strong>Your own gestures</strong><span>Assign any gesture to any action, including reload, duplicate tab, copy link and copy text.</span></div>
+        </li>
+        <li>
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><strong>Your search engine</strong><span>Google, Bing, DuckDuckGo or any site that takes a search URL.</span></div>
+        </li>
+        <li>
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><strong>Tab order control</strong><span>Choose where new tabs open and which tab you land on after closing one.</span></div>
+        </li>
+        <li>
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><strong>A trail you can see</strong><span>Pick the color and width, add high contrast, and show the action name while you draw.</span></div>
+        </li>
+        <li>
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><strong>Site exclusions</strong><span>Turn gestures off on sites that use the mouse themselves, with simple wildcard patterns.</span></div>
+        </li>
+        <li>
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><strong>Modifier keys</strong><span>Require Alt, Ctrl or Shift for link and selection gestures if you drag links a lot.</span></div>
+        </li>
+        <li>
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><strong>Clickable maps on Google</strong><span>Click the map preview in Google results to open Google Maps.</span></div>
+        </li>
+        <li>
+            <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><strong>Settings that travel</strong><span>Settings sync with your Chrome profile, and you can export and import them.</span></div>
+        </li>
+    </ul>
+</section>
+
+<section class="section wrap" id="screenshots">
+    <div class="section-head">
+        <h2>See it in action</h2>
+        <p>Click a screenshot to see it full size.</p>
+    </div>
+    <div class="shots">
+        <figure>
+            <a href="{{ '/assets/screenshots/01-page-gesture.png' | relative_url }}"><img src="{{ '/assets/screenshots/01-page-gesture.png' | relative_url }}" width="1280" height="800" loading="lazy" alt="A gesture drawn down and then right on a web page, with the label Close Tab"></a>
+            <figcaption>Draw down and right with the right mouse button to close the tab.</figcaption>
+        </figure>
+        <figure>
+            <a href="{{ '/assets/screenshots/03-link-gesture.png' | relative_url }}"><img src="{{ '/assets/screenshots/03-link-gesture.png' | relative_url }}" width="1280" height="800" loading="lazy" alt="A link dragged to the right, with the label Open Link in Background Tab"></a>
+            <figcaption>Drag a link to the right to open it in a background tab.</figcaption>
+        </figure>
+        <figure>
+            <a href="{{ '/assets/screenshots/02-selection-gesture.png' | relative_url }}"><img src="{{ '/assets/screenshots/02-selection-gesture.png' | relative_url }}" width="1280" height="800" loading="lazy" alt="Selected text dragged to the right, with the label Search Text in New Tab"></a>
+            <figcaption>Drag selected text to the right to search for it.</figcaption>
+        </figure>
+        <figure>
+            <a href="{{ '/assets/screenshots/04-options-mappings.png' | relative_url }}"><img src="{{ '/assets/screenshots/04-options-mappings.png' | relative_url }}" width="1280" height="800" loading="lazy" alt="The options page with the list of page gestures and their actions"></a>
+            <figcaption>Change any gesture on the options page.</figcaption>
+        </figure>
+        <figure>
+            <a href="{{ '/assets/screenshots/05-options-appearance.png' | relative_url }}"><img src="{{ '/assets/screenshots/05-options-appearance.png' | relative_url }}" width="1280" height="800" loading="lazy" alt="Appearance settings: line color, line width, high contrast and hints"></a>
+            <figcaption>Make the trail your own.</figcaption>
+        </figure>
+        <figure>
+            <a href="{{ '/assets/screenshots/06-options-taborder.png' | relative_url }}"><img src="{{ '/assets/screenshots/06-options-taborder.png' | relative_url }}" width="1280" height="800" loading="lazy" alt="Tab order settings for where tabs open and which tab is active after closing one"></a>
+            <figcaption>Decide where tabs open and where you land after closing one.</figcaption>
+        </figure>
+    </div>
+</section>
+
+<section class="section wrap">
+    <div class="callout">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>
+            <h2>Private by design</h2>
+            <p>QuickGestures runs entirely in your browser. It has no servers, no analytics and no tracking, and it never sends anything anywhere. <a href="{{ '/privacy-policy' | relative_url }}">Read the privacy policy</a>.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section wrap faq" id="faq">
+    <div class="section-head">
+        <h2>Questions</h2>
+    </div>
+    <details>
+        <summary>How do I open the right-click menu on macOS or Linux?</summary>
+        <p>There the menu opens as soon as the button is pressed, so QuickGestures holds it back while you draw. Right-click twice in quick succession to open the menu.</p>
+    </details>
+    <details>
+        <summary>Does it work on every website?</summary>
+        <p>It works on regular web pages. Chrome does not let extensions run on its own pages, such as the new tab page, settings and the Chrome Web Store.</p>
+    </details>
+    <details>
+        <summary>A site uses mouse dragging itself. Can I turn gestures off there?</summary>
+        <p>Yes. Add the site under Exclusions on the options page, for example <code>*.example.com/*</code>.</p>
+    </details>
+    <details>
+        <summary>Where are the options?</summary>
+        <p>Click the QuickGestures icon in the Chrome toolbar, or right-click it and choose Options.</p>
+    </details>
+    <details>
+        <summary>I found a bug or have an idea.</summary>
+        <p>Please <a href="{{ site.repository_url }}/issues">open an issue on GitHub</a>.</p>
+    </details>
+</section>
+
+<section class="section wrap cta">
+    <div class="section-head">
+        <h2>Give your mouse a few new moves</h2>
+        <p>Install QuickGestures and try the right-click gesture to the left on any page.</p>
+    </div>
+    <div class="hero-actions">
+        <a class="btn btn-primary" href="{{ install_url }}">Add to Chrome</a>
+        <a class="btn btn-secondary" href="{{ '/installation' | relative_url }}">Installation guide</a>
+    </div>
+</section>
