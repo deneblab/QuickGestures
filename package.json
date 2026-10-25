@@ -7,15 +7,8 @@
     "build": "npm run typecheck && node esbuild.config.js",
     "typecheck": "tsc --noEmit",
     "watch": "node esbuild.config.js --watch",
-    "clean": "rm -rf dist",
-    "dev": "npm run clean && npm run watch",
-    "local-build": "node scripts/local-build.js",
-    "version:sync": "node scripts/version-sync.js",
-    "package": "node scripts/package-extension.js",
-    "prepare-release": "node scripts/prepare-release.js",
-    "release": "npm run prepare-release && echo 'Release prepared! Push to production branch or create git tag to trigger GitHub Actions.'",
-    "release:production": "node scripts/release-to-production.js",
-    "release:tag": "npm run prepare-release && echo 'Create and push git tag to trigger release.'"
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
+    "dev": "npm run clean && npm run watch"
   },
   "devDependencies": {
     "@types/chrome": "^0.3.6",

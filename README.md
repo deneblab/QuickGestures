@@ -149,6 +149,7 @@ A powerful Chrome extension that brings fluid mouse gesture navigation to your b
 - Node.js 22+
 - npm or yarn
 - Chrome browser
+- .NET 10 SDK for the full build (`build.cmd` / `build.sh` installs a local copy if it is missing)
 
 ### Setup
 ```bash
@@ -164,6 +165,14 @@ npm run build
 # Clean build artifacts
 npm run clean
 ```
+
+### Full build and package
+The release build uses [Fallout](https://docs.fallout.build) (`src/build/`) and [abcversion](https://github.com/deneblab/abcversion) for the version:
+```bash
+./build.sh      # Linux/macOS
+.\build.cmd     # Windows
+```
+It typechecks, bundles into `dist/`, sets the version in `dist/manifest.json` and creates `output/quickgestures-v<version>.zip`. Run `./build.sh --help` for all targets.
 
 ### Documentation
 Project documentation available in [`docs/`](docs/):

@@ -16,7 +16,9 @@
 ### Project Structure
 ```
 src/
-├── background/          # Service worker (Manifest V3)
+├── extension/               # The Chrome extension (bundled by esbuild.config.js into dist/)
+│   ├── manifest.json        # Manifest V3; its version is set at build time
+│   ├── background/          # Service worker (Manifest V3)
 │   ├── service-worker.ts    # Main background script
 │   ├── action-router.ts     # Gesture action execution
 │   ├── storage.ts           # Settings persistence
@@ -39,7 +41,11 @@ src/
 │   ├── constants.ts         # Default settings & mappings
 │   ├── messaging.ts         # Inter-script communication
 │   └── utils.ts             # Helper functions
-└── assets/              # Icons and static resources
+│   └── assets/              # Icons and static resources
+└── build/                   # Fallout build (C#): version, typecheck, bundle, zip, release, store
+    ├── Build.cs             # Clean, Restore, ShowVersion, Typecheck, Compile, Package
+    ├── Build.Release.cs     # ReleaseNotes, Release (CI only)
+    └── Build.Store.cs       # PublishStore (Chrome Web Store)
 ```
 
 ## 🏗️ Architecture & Key Patterns
@@ -59,7 +65,7 @@ User Gesture → Content Script → Background Worker → Chrome API → Result
   Feedback       Recognition    Routing           Operations
 ```
 
-### Core Interfaces (from `src/shared/types.ts`)
+### Core Interfaces (from `src/extension/shared/types.ts`)
 ```typescript
 // Main settings structure
 interface ExtensionSettings {
@@ -137,7 +143,7 @@ npm run clean      # Clean build artifacts
 
 1. **Add action type**:
    ```typescript
-   // src/shared/types.ts
+   // src/extension/shared/types.ts
    export type ActionType = 
      | 'existing_action'
      | 'new_custom_action'; // Add here
@@ -145,7 +151,7 @@ npm run clean      # Clean build artifacts
 
 2. **Add action label**:
    ```typescript
-   // src/shared/constants.ts
+   // src/extension/shared/constants.ts
    export const ACTION_LABELS: Record<ActionType, string> = {
      new_custom_action: 'Custom Action Description'
    };
@@ -153,7 +159,7 @@ npm run clean      # Clean build artifacts
 
 3. **Implement handler**:
    ```typescript
-   // src/background/action-router.ts
+   // src/extension/background/action-router.ts
    private async handleNewCustomAction(tabId: number): Promise<void> {
      // Implementation using Chrome APIs
    }
@@ -170,13 +176,13 @@ npm run clean      # Clean build artifacts
 
 1. **Update context type**:
    ```typescript
-   // src/shared/types.ts
+   // src/extension/shared/types.ts
    export type GestureContext = 'page' | 'link' | 'selection' | 'new_context';
    ```
 
 2. **Add detection logic**:
    ```typescript
-   // src/content/context-detector.ts
+   // src/extension/content/context-detector.ts
    detectContext(element: Element): ContextDetection {
      // Add logic to identify new context
    }
@@ -184,7 +190,7 @@ npm run clean      # Clean build artifacts
 
 3. **Add default mappings**:
    ```typescript
-   // src/shared/constants.ts - add new mapping array
+   // src/extension/shared/constants.ts - add new mapping array
    export const DEFAULT_NEW_CONTEXT_MAPPINGS = [
      { gesture: 'R', action: 'some_action' as ActionType }
    ];
@@ -192,34 +198,35 @@ npm run clean      # Clean build artifacts
 
 ### Modifying Visual Feedback
 
-- **Overlay rendering**: `src/content/overlay.ts`  
-- **Style settings**: `src/shared/types.ts` → `StyleSettings`
-- **Default styles**: `src/shared/constants.ts` → `DEFAULT_STYLE`
+- **Overlay rendering**: `src/extension/content/overlay.ts`  
+- **Style settings**: `src/extension/shared/types.ts` → `StyleSettings`
+- **Default styles**: `src/extension/shared/constants.ts` → `DEFAULT_STYLE`
 
 ### Working with Settings
 
 - **Read settings**: `await getSettings()` from background
 - **Update settings**: `await saveSettings(newSettings)`  
 - **Settings sync**: Automatic via Chrome storage API
-- **Settings UI**: `src/options/options.ts`
+- **Settings UI**: `src/extension/options/options.ts`
 
 ## 🔧 Important Commands & Scripts
 
 ```bash
 # Development workflow
 npm install           # Install dependencies
-npm run dev          # Start development with watch
-npm run build        # Production build
-
-# Release workflow  
-npm run prepare-release    # Build + package + changelog
-npm run release           # Full release preparation
-
-# Utility commands
+npm run dev          # Clean dist/ and start watch mode
+npm run build        # Typecheck + bundle into dist/
 npm run clean        # Remove dist/ directory
-npm run version:sync # Sync versions across files
-npm run package      # Create extension ZIP
+
+# Full build (Fallout, needs .NET 10 SDK; the script installs a local copy if missing)
+./build.sh           # Linux/macOS: Package (default) = typecheck, bundle, version, zip into output/
+.\build.cmd          # Windows: same
+./build.sh --help    # List targets and parameters
+./build.sh ReleaseNotes             # output/RELEASE_NOTES.md from commits since the last tag
+./build.sh Package --version-override 1.2.3
 ```
+
+CI only: `Release` (tags the commit and creates the GitHub release) and `PublishStore` (Chrome Web Store, started from the manual "Publish to Chrome Web Store" workflow).
 
 ## ⚠️ Critical Constraints & Limitations
 
@@ -229,7 +236,7 @@ npm run package      # Create extension ZIP
 - **Cross-origin**: Limited by CORS, same-origin policies
 - **Manifest V3**: Service worker limitations (no DOM access)
 
-### Required Permissions (from manifest.json)
+### Required Permissions (from src/extension/manifest.json)
 - `storage` - Save settings locally
 - `tabs` - Tab management operations and tab order control
 - `scripting` - Inject content scripts and interact with pages
@@ -275,7 +282,7 @@ refactor: simplify message passing between scripts
 ### Release Workflow
 - **Production branch**: For stable releases
 - **GitHub Actions**: Automated release creation
-- **Version sync**: Automatic across manifest.json and package.json; calculated by abcversion (BaseVersion in .abcversion.json)
+- **Version**: calculated by abcversion (BaseVersion in .abcversion.json) in the Fallout build and written only into `dist/manifest.json`; the versions in `src/extension/manifest.json` and `package.json` are not updated
 
 ## 🚀 Success Metrics for Agents
 

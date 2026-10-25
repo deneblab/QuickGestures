@@ -13,13 +13,12 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to release (e.g., 1.0.11)"
-        required: true
+        description: "Version to release (e.g., 1.0.11); empty = calculated by abcversion"
+        required: false
         type: string
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   release:
@@ -38,91 +37,18 @@ jobs:
           node-version: "22"
           cache: "npm"
 
-      - name: Install abcversion
-        run: |
-          mkdir -p "$HOME/.local/bin"
-          curl -fsSL -o "$HOME/.local/bin/abcversion" \
-            https://github.com/deneblab/abcversion/releases/latest/download/abcversion-linux-x64
-          chmod +x "$HOME/.local/bin/abcversion"
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          "$HOME/.local/bin/abcversion" --version
-
-      - name: Get version
-        id: version
-        run: |
-          VERSION="$(abcversion -p semversion)"
-
-          # Validate version is not empty
-          if [ -z "$VERSION" ]; then
-            echo "Error: Version output is empty"
-            exit 1
-          fi
-
-          {
-            echo "version=$VERSION"
-            echo "tag=v$VERSION"
-            echo "sha=$(abcversion -p gitsha)"
-            echo "branch=$(abcversion -p gitbranch)"
-            echo "build_date_utc=$(abcversion -p datetime)"
-          } >> "$GITHUB_OUTPUT"
-
-          echo "Version:        $VERSION"
-          echo "Tag:            v$VERSION"
-          echo "SHA:            $(abcversion -p gitsha)"
-          echo "Branch:         $(abcversion -p gitbranch)"
-          echo "BuildDate(UTC): $(abcversion -p datetime)"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Sync versions
-        run: node scripts/version-sync.js
-        env:
-          TARGET_VERSION: ${{ steps.version.outputs.version }}
-      - name: Create release tag
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
-          # Check if tag already exists locally or remotely
-          TAG_NAME="v${{ steps.version.outputs.version }}"
-          
-          # Delete local tag if it exists
-          git tag -d "$TAG_NAME" 2>/dev/null || true
-          
-          # Delete remote tag if it exists (ignore errors)
-          git push --delete origin "$TAG_NAME" 2>/dev/null || true
-          
-          # Create new tag
-          git tag "$TAG_NAME"
-          git push origin "$TAG_NAME"
-
-      - name: Build extension
-        run: npm run build
-
-      - name: Package extension
-        run: node scripts/package-extension.js
-
-      - name: Prepare release with filtered changelog
-        run: |
-          # Use the existing prepare-release script which filters SAVEPOINT commits
-          TARGET_VERSION="${{ steps.version.outputs.version }}" node scripts/prepare-release.js
-          
-      - name: Debug release notes
-        run: |
-          echo "=== Checking if RELEASE_NOTES.md exists ==="
-          ls -la RELEASE_NOTES.md || echo "RELEASE_NOTES.md not found"
-          echo "=== Content of RELEASE_NOTES.md ==="
-          cat RELEASE_NOTES.md || echo "Cannot read RELEASE_NOTES.md"
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
         with:
-          tag_name: v${{ steps.version.outputs.version }}
-          name: QuickGestures v${{ steps.version.outputs.version }}
-          body_path: RELEASE_NOTES.md
-          draft: false
-          prerelease: ${{ contains(steps.version.outputs.version, 'beta') || contains(steps.version.outputs.version, 'alpha') }}
-          files: |
-            quickgestures-*.zip
-            RELEASE_NOTES.md
+          global-json-file: global.json
+
+      - name: Build, package and release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          ARGS=(Release)
+          if [ -n "$VERSION" ]; then
+            ARGS+=(--version-override "$VERSION")
+          fi
+          ./build.sh "${ARGS[@]}"

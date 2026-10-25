@@ -1,0 +1,9 @@
+<Project>
+  <!-- The repository folder is shared between Windows and the Linux sandbox, so each OS gets its own restore and build output -->
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj/$(OS)/</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(MSBuildThisFileDirectory)bin/$(OS)/</BaseOutputPath>
+    <!-- The SDK only excludes the current OS's folders; the other OS's generated sources must not be compiled too -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
+  </PropertyGroup>
+</Project>

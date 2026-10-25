@@ -28,6 +28,8 @@ npm run build
 
 This creates a `dist` folder with the compiled extension.
 
+To also create the release zip (`output/quickgestures-v<version>.zip`), run the full build instead: `.\build.cmd` on Windows or `./build.sh` on Linux/macOS. It needs the .NET 10 SDK and installs a local copy if it is missing.
+
 ### Step 3: Load in Chrome
 1. Open Chrome and navigate to `chrome://extensions/`
 2. Enable **"Developer mode"** (toggle in top-right corner)

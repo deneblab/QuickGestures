@@ -6,7 +6,10 @@ yarn-error.log*
 
 # Build output
 dist/
-build/
+/build/
+output/
+src/build/bin/
+src/build/obj/
 
 # IDE
 .vscode/
