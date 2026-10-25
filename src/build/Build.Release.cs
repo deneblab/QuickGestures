@@ -41,27 +41,39 @@ partial class Build
             Log.Information("Release notes: {File}", ReleaseNotesFile);
         });
 
-    // Runs in the release workflow: tags the commit and creates (or updates) the GitHub release
+    // Runs in the release workflows: tags the commit and creates the GitHub release.
+    // A released version is never overwritten; PublishStore reuses the existing release instead.
     Target Release => _ => _
         .DependsOn(Package, ReleaseNotes)
         .Requires(() => IsServerBuild)
         .Executes(() =>
         {
-            GitTasks.Git($"tag --force {ReleaseTag}");
-            GitTasks.Git($"push --force origin refs/tags/{ReleaseTag}");
-
-            var title = $"QuickGestures {ReleaseTag}";
-            var assets = $"\"{PackageFile}\" \"{ReleaseNotesFile}\"";
             if (ReleaseExists(ReleaseTag))
             {
-                Gh($"release upload {ReleaseTag} {assets} --clobber");
-                Gh($"release edit {ReleaseTag} --title \"{title}\" --notes-file \"{ReleaseNotesFile}\"");
+                Assert.True(InvokedTargets.Any(target => target.Name == nameof(PublishStore)),
+                    $"Release {ReleaseTag} already exists; a version is never released twice");
+                Log.Information("Release {Tag} already exists, reusing it", ReleaseTag);
+                return;
+            }
+
+            var head = GitTasks.Git("rev-parse HEAD", logOutput: false).Single().Text;
+            var tagCommit = RemoteTagCommit(ReleaseTag);
+            if (tagCommit == null)
+            {
+                GitTasks.Git($"tag {ReleaseTag}");
+                GitTasks.Git($"push origin refs/tags/{ReleaseTag}");
             }
             else
             {
-                var prerelease = Version.Contains("alpha") || Version.Contains("beta") ? " --prerelease" : "";
-                Gh($"release create {ReleaseTag} {assets} --title \"{title}\" --notes-file \"{ReleaseNotesFile}\"{prerelease}");
+                // Tag left by an earlier run that failed before creating the release
+                Assert.True(tagCommit == head, $"Tag {ReleaseTag} already points at {tagCommit}, not at HEAD {head}; tags are never moved");
+                Log.Information("Tag {Tag} already points at HEAD, creating only the release", ReleaseTag);
             }
+
+            var title = $"QuickGestures {ReleaseTag}";
+            var assets = $"\"{PackageFile}\" \"{ReleaseNotesFile}\"";
+            var prerelease = Version.Contains("alpha") || Version.Contains("beta") ? " --prerelease" : "";
+            Gh($"release create {ReleaseTag} {assets} --verify-tag --title \"{title}\" --notes-file \"{ReleaseNotesFile}\"{prerelease}");
         });
 
     string[] GetCommitsSinceLastTag()
@@ -76,6 +88,16 @@ partial class Build
             .Select(output => output.Text)
             .Where(text => !string.IsNullOrWhiteSpace(text))
             .ToArray();
+    }
+
+    // Commit of the tag on origin, or null; for an annotated tag the peeled ^{} line holds the commit
+    static string RemoteTagCommit(string tag)
+    {
+        var lines = GitTasks.Git($"ls-remote --tags origin refs/tags/{tag} refs/tags/{tag}^{{}}", logOutput: false)
+            .Select(output => output.Text.Split('\t'))
+            .Where(parts => parts.Length == 2)
+            .ToArray();
+        return (lines.FirstOrDefault(parts => parts[1].EndsWith("^{}")) ?? lines.FirstOrDefault())?[0];
     }
 
     bool ReleaseExists(string tag)

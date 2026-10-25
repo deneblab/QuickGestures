@@ -1,50 +1,48 @@
 name: Publish to Chrome Web Store
 
-# Manual only. A release created by release.yml cannot trigger this workflow
-# (events from GITHUB_TOKEN do not start other workflows), so a "release"
-# trigger would never fire.
+# Manual only. Releases HEAD of the chosen branch (or reuses its existing release) and
+# submits that package for review; skipped when the version is already live or in review.
+# A "release" trigger would never fire: events from GITHUB_TOKEN do not start other workflows.
 on:
   workflow_dispatch:
-    inputs:
-      tag:
-        description: "Release tag to publish, e.g. v0.3.8 (empty = latest release)"
-        required: false
-        default: ""
-        type: string
-      target:
-        description: "review = upload and submit for review (goes live after approval); draft = upload only"
-        required: true
-        default: "review"
-        type: choice
-        options:
-          - review
-          - draft
 
+permissions:
+  contents: write
+
+# Shared with release.yml: both create releases and tags
 concurrency:
-  group: chrome-web-store
+  group: release
   cancel-in-progress: false
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: "22"
+          cache: "npm"
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
 
-      - name: Publish to Chrome Web Store
+      - name: Cache NuGet packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('src/build/*.csproj', 'src/build/Directory.Build.props', 'global.json') }}
+
+      - name: Release and publish to Chrome Web Store
         env:
           GH_TOKEN: ${{ github.token }}
           CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
@@ -52,27 +50,4 @@ jobs:
           REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
           EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
           PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
-          TAG: ${{ inputs.tag }}
-          TARGET: ${{ inputs.target }}
-        run: |
-          ARGS=(PublishStore --store-target "$TARGET")
-          if [ -n "$TAG" ]; then
-            ARGS+=(--store-release-tag "$TAG")
-          fi
-          ./build.sh "${ARGS[@]}"
-
-      - name: Summary
-        if: success()
-        env:
-          TAG: ${{ inputs.tag }}
-          TARGET: ${{ inputs.target }}
-        run: |
-          {
-            echo "### Chrome Web Store"
-            echo "- Release: ${TAG:-latest}"
-            if [ "$TARGET" = "review" ]; then
-              echo "- Submitted for review; it goes live automatically after approval."
-            else
-              echo "- Uploaded as a draft. Submit it from https://chrome.google.com/webstore/devconsole"
-            fi
-          } >> "$GITHUB_STEP_SUMMARY"
+        run: ./build.sh PublishStore

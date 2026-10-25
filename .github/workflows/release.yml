@@ -8,8 +8,6 @@ on:
       - "docs/**"
       - "**/*.md"
       - "LICENSE"
-    tags:
-      - "v*"
   workflow_dispatch:
     inputs:
       version:
@@ -20,10 +18,16 @@ on:
 permissions:
   contents: write
 
+# Shared with publish-chrome.yml: both create releases and tags
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   release:
     name: Create Release
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -41,6 +45,12 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('src/build/*.csproj', 'src/build/Directory.Build.props', 'global.json') }}
 
       - name: Build, package and release
         env:

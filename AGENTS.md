@@ -226,7 +226,7 @@ npm run clean        # Remove dist/ directory
 ./build.sh Package --version-override 1.2.3
 ```
 
-CI only: `Release` (tags the commit and creates the GitHub release) and `PublishStore` (Chrome Web Store, started from the manual "Publish to Chrome Web Store" workflow).
+CI only: `Release` (tags the commit and creates the GitHub release; fails if the version is already released, never moves a tag) and `PublishStore` (runs `Release` or reuses the existing release of HEAD, then submits the package to the Chrome Web Store for review; skipped when the version is already live or in review).
 
 ## ⚠️ Critical Constraints & Limitations
 
@@ -281,7 +281,7 @@ refactor: simplify message passing between scripts
 
 ### Release Workflow
 - **Production branch**: For stable releases
-- **GitHub Actions**: Automated release creation
+- **GitHub Actions**: `release.yml` creates a release on every push to `production`; `publish-chrome.yml` (manual, no inputs) releases HEAD if needed and submits it to the Chrome Web Store for review. Both share the `release` concurrency group. Dependabot updates actions, npm and NuGet weekly
 - **Version**: calculated by abcversion (BaseVersion in .abcversion.json) in the Fallout build and written only into `dist/manifest.json`; the versions in `src/extension/manifest.json` and `package.json` are not updated
 
 ## 🚀 Success Metrics for Agents
