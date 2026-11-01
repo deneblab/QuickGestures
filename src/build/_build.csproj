@@ -12,10 +12,10 @@
 
   <ItemGroup>
     <PackageReference Include="Fallout.Common" Version="10.4.0" />
-    <PackageReference Include="Deneblab.AbcVersion" Version="1.2.19" />
+    <PackageReference Include="Deneblab.AbcVersion" Version="1.2.21" />
     <!-- Fallout.Common 10.4.0 brings in 10.0.10 of these, which has known vulnerabilities -->
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.13" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.14" />
   </ItemGroup>
 
 </Project>
