@@ -11,7 +11,7 @@
     "dev": "npm run clean && npm run watch"
   },
   "devDependencies": {
-    "@types/chrome": "^0.3.6",
+    "@types/chrome": "^0.3.7",
     "@types/node": "^24.19.2",
     "esbuild": "^0.28.2",
     "typescript": "^7.0.2"
